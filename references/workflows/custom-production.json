@@ -45,14 +45,14 @@
     },
     {
       "id": "options",
-      "action": "先说明方案仅供参考，用表格列默认配置和制作方式，按实际需求选择；已明确项不重复问",
+      "action": "至多一张概览介绍默认起点和可讨论方向；声明非制作清单、不保证全部采用，围绕内容持续沟通，由Agent据需求安排",
       "references": [
         "custom.md"
       ]
     },
     {
       "id": "brief",
-      "action": "沿用已给目标和素材，只补必要内容、数量和输出位置",
+      "action": "结合上下文持续理解用户想表达的内容和效果；不要求先选完技术菜单，已有明确要求不重复问",
       "references": [
         "custom.md"
       ]
@@ -153,7 +153,7 @@
     "scope": "custom-production only; product-showcase remains a fixed recipe",
     "offer_simple_or_optional_techniques": true,
     "present_relevant_technique_options": true,
-    "ask_one_combined_direction_question_when_unspecified": true,
+    "ask_one_combined_direction_question_when_unspecified": false,
     "do_not_repeat_current_context_choices": true,
     "explicit_simple_or_direct_request_uses_defaults": true,
     "never_enable_optional_steps_only_because_they_are_available": true,
@@ -178,21 +178,15 @@
       "do_not_assume_custom_from_generic_video_request": true
     },
     "presentation": {
-      "format": "tables",
-      "sections": [
-        "reference-only notice and adapt-to-actual-brief",
-        "effective-default-settings",
-        "available-production-methods-and-conditions",
-        "ask-only-unspecified-goal-or-choices"
-      ],
-      "reference_notice": "下面只是建议，不限制你提出其他效果或技巧；会根据实际需求研究实现，并在提交前核验最终方案。",
-      "must_list_methods": [
-        "direct-generation",
-        "storyboard-image-design",
-        "video-motion-reference",
-        "long-video-assembly-or-h3-reference-continuation",
-        "optional-upscale-and-review"
-      ],
+      "format": "single-brief-contextual-overview",
+      "max_tables": 1,
+      "separate_defaults_and_methods_tables": false,
+      "opening_notice": "你只管描述想拍什么，我们边聊边确定，我会按实际需求安排。下面是默认起点与可讨论方向，不是本次制作清单，表中内容不一定会采用，也可提出表外需求。",
+      "conversational_refinement": true,
+      "agent_selects_methods_from_requirements_and_feedback": true,
+      "user_must_select_every_technique": false,
+      "listed_options_are_not_promised_content_or_mandatory_steps": true,
+      "adapt_or_shorten_to_current_context": true,
       "do_not_repeat_resolved_questions": true
     },
     "readiness_checks": {
@@ -210,7 +204,8 @@
       "experiment_within_existing_authorization": true,
       "do_not_claim_unverified_support": true,
       "no_automatic_new_skill_or_public_library_update": true
-    }
+    },
+    "discuss_creative_goal_before_requesting_technical_choices": true
   },
   "long_video_options": {
     "segmented_assembly": {
