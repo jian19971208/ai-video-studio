@@ -185,7 +185,7 @@
         "available-production-methods-and-conditions",
         "ask-only-unspecified-goal-or-choices"
       ],
-      "reference_notice": "以下默认和方式是参考起点；会结合实际内容、素材和要求选择，提交前按最终方案核验所选接入是否可运行。",
+      "reference_notice": "下面只是建议，不限制你提出其他效果或技巧；会根据实际需求研究实现，并在提交前核验最终方案。",
       "must_list_methods": [
         "direct-generation",
         "storyboard-image-design",
@@ -201,6 +201,15 @@
       "initial_is_not_final_readiness": true,
       "invalidate_related_evidence_on_requirement_change": true,
       "paid_probe": false
+    },
+    "open_ended_requests": {
+      "suggestions_are_not_capability_whitelist": true,
+      "accept_unlisted_effects_and_techniques": true,
+      "implementation": "reuse applicable guides; otherwise inspect actual nodes/docs/tools and research a task-local implementation",
+      "missing_template_is_not_unsupported_platform": true,
+      "experiment_within_existing_authorization": true,
+      "do_not_claim_unverified_support": true,
+      "no_automatic_new_skill_or_public_library_update": true
     }
   },
   "long_video_options": {
