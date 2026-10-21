@@ -50,7 +50,7 @@ workflow-targets输出ask_user、intake_allowed、supported_platforms。新proje
 
 - 工具：[命令](references/integrations/cli.md)、[构建与分发](references/build.md)。使用对应OS/架构Go二进制，普通使用无需安装Go或Python。
 - 方法：[技巧目录](references/techniques/index.md)、[节点执行图](references/techniques/graphs.md)、[质量审查](references/techniques/quality-review/guide.md)。技巧按通用/模型/节点/平台和前置能力应用。
-- 使用H3前发现并读取独立[`h3-prompt-writing`](https://github.com/MiniMax-AI/MiniMax-H3/tree/main/skills/h3-prompt-writing)官方Skill；缺失时按[安装说明](README.md)从MiniMax官方仓库安装，不能伪称已经应用官方规范。
+- 使用H3前发现并读取独立[`h3-prompt-writing`](https://github.com/MiniMax-AI/MiniMax-H3/tree/main/skills/h3-prompt-writing)官方Skill；依赖缺失时直接使用上述官方来源，由宿主安装工具获取；具体读取模式见[提示词技巧](references/techniques/prompt-writing/guide.md)。不能伪称已经应用官方规范。
 - 扩展：[工作流编写](references/workflows/authoring.md)、[步骤契约](references/workflows/step-contract.md)、[生命周期](references/workflows/lifecycle.md)、[新增接入](references/integrations/adapter-contract.md)、[新增技巧](references/techniques/authoring.md)。通用技巧只引用，不在每个流程抄一遍。当前任务草稿、长期登记、发布Skill分别处理；后两者需要用户明确要求和相应验证。
 - 清空配置按[存储规则](references/storage.md)执行，用户明确要求即授权，只清配置/缓存，不删Skill/产出，不恢复旧Key。
 
