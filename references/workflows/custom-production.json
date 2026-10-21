@@ -193,7 +193,15 @@
         "video-mp4",
         "actual-request-parameters-json"
       ],
-      "review_report_when_disabled": false
+      "review_report_when_disabled": false,
+      "show_only_adopted_default_actions": true,
+      "omit_user_facing_rows": [
+        "disabled-extra-processing",
+        "basic-file-checks",
+        "no-review-report"
+      ],
+      "keep_explicit_official_prompting": true,
+      "internal_settings_unchanged": true
     },
     "readiness_checks": {
       "initial": "read-only connectivity, inventory, billing route and host tools for option presentation",
@@ -233,8 +241,8 @@
       "does_not_require_generation_authorization": true,
       "opening_order": [
         "explain-default-direct-generation",
-        "state-default-delivery-video-and-request-parameters-no-review-report",
-        "show-current-default-action-table",
+        "state-default-delivery-video-and-request-parameters",
+        "show-adopted-default-actions-with-official-prompting",
         "offer-view-technique-catalog",
         "continue-with-user-content"
       ],
