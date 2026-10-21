@@ -187,7 +187,12 @@
       "user_can_name_techniques_or_describe_effects": true,
       "agent_must_design_actual_execution_from_context": true,
       "do_not_require_user_to_choose_every_method": true,
-      "do_not_repeat_resolved_questions": true
+      "do_not_repeat_resolved_questions": true,
+      "default_delivery_must_be_explicit": [
+        "video-mp4",
+        "actual-request-parameters-json"
+      ],
+      "review_report_when_disabled": false
     },
     "readiness_checks": {
       "initial": "read-only connectivity, inventory, billing route and host tools for option presentation",
@@ -214,7 +219,7 @@
       ],
       "list_command": "technique-list",
       "detail_command": "technique-describe --id ID",
-      "invitation": "想了解有哪些做法，可以说“列出技巧”，也可以让我按你的需求推荐。",
+      "invitation": "也可以先看看有哪些技巧：说“列出技巧”，我会说明用途和场景，再按需求安排；想简单制作直接说内容即可。",
       "show_invitation": "once when introducing custom production in a new conversation",
       "show_full_catalog": "only when requested",
       "user_columns": [
@@ -224,7 +229,14 @@
         "availability_or_requirements"
       ],
       "does_not_enable_optional_steps": true,
-      "does_not_require_generation_authorization": true
+      "does_not_require_generation_authorization": true,
+      "opening_order": [
+        "explain-default-direct-generation",
+        "state-default-delivery-video-and-request-parameters-no-review-report",
+        "show-current-default-action-table",
+        "offer-view-technique-catalog",
+        "continue-with-user-content"
+      ]
     }
   },
   "long_video_options": {
