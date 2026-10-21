@@ -34,7 +34,11 @@
     "rating": 5,
     "status": "核心",
     "guide": "prompt-writing/guide.md",
-    "summary": "按所选模型规范组织提示词，明确参考素材与镜头的对应关系。"
+    "summary": "基础必用：本机已有官方Skill时，所有H3生成、修改和续接提示词都按官方规范编写，并核对实际参考映射。",
+    "user_option": false,
+    "mandatory_for_models": [
+      "MiniMax H3"
+    ]
   },
   {
     "id": "reference-to-video",

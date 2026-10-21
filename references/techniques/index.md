@@ -1,6 +1,6 @@
 # Techniques
 
-用户可直接说“列出技巧”“解释图片分镜”或“按我的需求推荐做法”。程序入口为`avp technique-list`，关键词筛选加`--query 关键词`；具体操作用`avp technique-describe --id ID`读取实际guide。清单来自本目录catalog.json，只描述方法，不自动证明当前平台可运行，不会执行生成或启用可选步骤。
+用户可直接说“列出技巧”“解释图片分镜”或“按我的需求推荐做法”。程序入口为`avp technique-list`，关键词筛选加`--query 关键词`；具体操作用`avp technique-describe --id ID`读取实际guide。清单来自本目录catalog.json，只描述方法，当前可用性按实际服务核对。以下是Agent内部查询说明，不要原样作为用户解释。
 
 按用途选择，不按节点数量堆叠。星级是本项目实用优先级；适用级别与前置能力决定是否可用。
 

@@ -59,12 +59,13 @@
     },
     {
       "id": "plan",
-      "action": "提取本次要求和有效配置，读取适用技巧，记录要求→方法→实际节点/参考/参数/提示词的对应；关闭步骤不执行",
+      "action": "提取本次要求和有效配置，读取适用技巧，记录要求→方法→实际节点/参考/参数/提示词的对应；关闭步骤不执行；所有H3提示词必用已安装的官方提示词Skill，核对参考映射",
       "references": [
         "../techniques/index.md",
         "../techniques/execution.md",
         "../techniques/graphs.md",
-        "authoring.md"
+        "authoring.md",
+        "../techniques/prompt-writing/guide.md"
       ]
     },
     {
@@ -236,7 +237,9 @@
         "show-current-default-action-table",
         "offer-view-technique-catalog",
         "continue-with-user-content"
-      ]
+      ],
+      "user_facing_note": "这些方法可以搭配，也可以提出其他效果，我们再按需求确定做法。",
+      "internal_rules_are_not_user_copy": true
     }
   },
   "long_video_options": {
@@ -340,5 +343,26 @@
     "on_user_change": "update plan and actual graph/prompt/inputs as applicable; recheck affected capabilities",
     "no_extra_delivery_files": true,
     "semantic_checks_owner": "executing Agent; graph schema validation alone does not judge story or intent"
+  },
+  "prompt_policy": {
+    "mandatory": true,
+    "user_option": false,
+    "model_family": "MiniMax H3",
+    "dependency": "h3-prompt-writing",
+    "when_installed": "read the actual Skill and current mode guide; apply to every generated or revised prompt",
+    "applies_to": [
+      "first-generation",
+      "revision",
+      "batch-each-output",
+      "continuation-each-segment"
+    ],
+    "reference_mapping": "match prompt reference labels to actual input slots",
+    "independent_of": [
+      "storyboard_images",
+      "upscale",
+      "review"
+    ],
+    "default_presentation": "默认使用H3官方提示词规范与参考映射，本机已有时必用",
+    "other_models": "follow the actual model-specific official instructions; do not force H3 format"
   }
 }
