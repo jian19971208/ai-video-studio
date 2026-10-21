@@ -48,4 +48,4 @@ Agent 使用 H3 时读取该依赖的实际文件。REF采用 `references/ref-en
 - [步骤契约](references/workflows/step-contract.md)
 - [构建与验证](references/build.md)
 
-当前版本为2.6.4。安装时使用当前仓库版本；已有用户配置与制作项目独立保留。更新主 Skill 和官方 H3 依赖分别处理，不将更新变成重置配置。
+当前版本为2.6.5。安装时使用当前仓库版本；已有用户配置与制作项目独立保留。更新主 Skill 和官方 H3 依赖分别处理，不将更新变成重置配置。

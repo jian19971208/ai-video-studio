@@ -1,5 +1,7 @@
 # Project records
 
+适用条件：自定义制作的review默认关闭，可按用户要求开启。关闭时不做内容审查、不抽取报告证据、不生成HTML，交付视频和请求参数；下载、文件完整性和基本播放检查仍做。本文的内容审查与HTML交付要求仅在启用审查或固定预设要求审查时适用，不反向强制开启自定义审查。
+
 每个项目独立保存，用户指定输出位置优先；默认在工作区新建明确名称目录。不要将真实商品、Key、节点缓存或视频原片写回Skill目录。
 
 `project.json`工作流版本、固定项/实际输入、后端、授权预算、阶段；`source/manifest.json`来源与商品真值；`storyboards/plan.json`镜头目的/参数/参考；`prompts/`实际官方规范prompt；`graphs/`绑定后的执行图；`execution/local`与`execution/rh`各自回执；`review/`证据与返修；`delivery/`仅成片、HTML审查报告、请求参数；超分时附原片。

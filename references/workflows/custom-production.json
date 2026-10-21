@@ -3,7 +3,7 @@
   "workflow_kind": "custom-planner",
   "id": "custom-production",
   "name": "自定义制作",
-  "version": "2.6.4",
+  "version": "2.6.5",
   "status": "candidate",
   "guide": "custom.md",
   "supported_backends": [
@@ -85,15 +85,18 @@
     },
     {
       "id": "review",
-      "action": "审画面和技术，无法试听标待试听",
+      "action": "仅有效配置review=true或用户单独要求审查时执行内容审查与图文报告；关闭时不抽帧、不生成审查报告",
       "references": [
         "../techniques/quality-review/guide.md",
         "../techniques/quality-review/report-format.md"
-      ]
+      ],
+      "when": {
+        "review": true
+      }
     },
     {
       "id": "deliver",
-      "action": "视频、HTML报告、实际请求参数同目录；超分时附原片",
+      "action": "默认只交视频与实际请求参数；review=true才附HTML审查报告；超分成功附原片",
       "references": [
         "records.md",
         "../techniques/quality-review/report-format.md"
@@ -101,7 +104,7 @@
     }
   ],
   "execution": "Agent plans then compiles a task-specific execution manifest; this entry itself must never be treated as a ready generation graph",
-  "delivery": "Video tasks follow standard three-file delivery; a single review/upscale task delivers the artifacts it actually produces.",
+  "delivery": "自定义制作默认交付成片MP4和实际请求参数JSON；review=true才生成并交付HTML审查报告；超分成功另附原片。下载、文件完整性和可播放性等基本交付检查仍执行，不以此声称内容合格。",
   "selection_policy": {
     "confirm_each_task": true,
     "skip_prompt_user_requested": false,
@@ -120,7 +123,8 @@
     "dimension_policy": "Resolve exact width and height from live model/node alignment constraints; do not silently lower resolution or change orientation",
     "apply_when_user_unspecified": true,
     "require_separate_parameter_confirmation": false,
-    "long_video_strategy": "recommend-from-content"
+    "long_video_strategy": "recommend-from-content",
+    "review": false
   },
   "intake_policy": {
     "order": [
@@ -158,5 +162,13 @@
     ],
     "storage": "workflows/config.json: workflows.NAME.custom_defaults",
     "separate_parameter_confirmation": false
+  },
+  "review_policy": {
+    "enabled_setting": "review",
+    "default": false,
+    "when_disabled": "skip content review, frame evidence extraction and HTML report; retain basic download/file/playability verification",
+    "when_enabled": "follow quality-review guide and comparison report format",
+    "explicit_review_request": "set review=true for this task",
+    "do_not_modify_existing_tasks": true
   }
 }

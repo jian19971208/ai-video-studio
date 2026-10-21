@@ -43,7 +43,8 @@
         "duration_seconds",
         "aspect_ratio",
         "upscale",
-        "require_separate_parameter_confirmation"
+        "require_separate_parameter_confirmation",
+        "review"
       ],
       "properties": {
         "duration_seconds": {
@@ -55,6 +56,9 @@
         },
         "require_separate_parameter_confirmation": {
           "const": false
+        },
+        "review": {
+          "type": "boolean"
         }
       }
     }

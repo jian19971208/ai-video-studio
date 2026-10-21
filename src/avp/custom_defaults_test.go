@@ -17,3 +17,20 @@ func TestCustomDefaultsSavedAndTaskOverride(t *testing.T) {
 	panics(t, func() { customSettings(cfg, w, M{"upscale": "yes"}) })
 	panics(t, func() { customSettings(cfg, w, M{"duration_seconds": -1}) })
 }
+
+func TestCustomReviewDefaultsOffAndCanBeEnabled(t *testing.T) {
+	w := M{"id": "custom-production", "default_production": M{"review": false}}
+	cfg := defaults()
+	values, _ := customSettings(cfg, w, nil)
+	if values["review"] != false {
+		t.Fatal("review should default off")
+	}
+	values, _ = customSettings(cfg, w, M{"review": true})
+	if values["review"] != true {
+		t.Fatal("explicit review request ignored")
+	}
+	if object(w["default_production"])["review"] != false {
+		t.Fatal("one-task review changed default")
+	}
+	panics(t, func() { customSettings(cfg, w, M{"review": "true"}) })
+}
