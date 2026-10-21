@@ -10,27 +10,24 @@
 
 ## 安装
 
-把下面的提示词直接发给支持本机工具调用和 Skill 安装的 Agent：
+将下面这一句复制给你的 Agent：
 
 ```text
-请安装并启用这个 Skill：
-https://github.com/jian19971208/ai-video-studio
-
-仓库根目录就是 ai-video-studio，按当前 Agent 的标准 Skill 安装方式安装。
-同时安装官方依赖：
-https://github.com/MiniMax-AI/MiniMax-H3/tree/main/skills/h3-prompt-writing
-
-安装完成后，按 ai-video-studio 的 SKILL.md 引导我开始使用。保留已有用户配置，不启动生成测试。
+请读取并执行安装说明：https://raw.githubusercontent.com/jian19971208/ai-video-studio/main/INSTALL.md
 ```
 
-若已安装 Node.js，也可使用通用 skills CLI：
+[INSTALL.md](INSTALL.md) 是给 Agent 执行的安装文档，已写清主 Skill 和官方 H3 依赖的来源、不同 Agent 的安装目录、具体下载命令、程序选择、安装验证和完成后的接入引导。你不需要自己下载压缩包、搬文件或编辑配置。
+
+需要使用支持本地文件、网络和程序调用的 Agent。纯聊天环境无法完成本机安装。
+
+若你习惯自己使用 skills CLI，且已有其要求的 Node.js 环境，可以执行：
 
 ```sh
-npx skills add https://github.com/jian19971208/ai-video-studio --skill ai-video-studio
-npx skills add https://github.com/MiniMax-AI/MiniMax-H3 --skill h3-prompt-writing
+npx skills add https://github.com/jian19971208/ai-video-studio --skill ai-video-studio -g
+npx skills add https://github.com/MiniMax-AI/MiniMax-H3 --skill h3-prompt-writing -g
 ```
 
-Node.js仅是上述可选安装器的要求，不是本 Skill 的运行依赖。也可让 Agent 使用自己的安装工具，或将仓库文件复制到其支持的 Skill 目录。已安装新版 H3 提示词依赖时保留，不强制重复安装。
+这是另一种安装方式，不是运行依赖。Agent 不需要为此额外安装 Node.js，安装文档另有宿主安装器和 Git 路线。
 
 ## H3 官方依赖
 
