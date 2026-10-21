@@ -127,3 +127,14 @@ RH工作流API接入时用`rh --account NAME --credential member execution-entry
 - 只预览本次覆盖：`avp workflow-describe --template custom-production --settings TASK_OVERRIDES.json`，不保存。
 
 Agent根据对话写JSON，不要求用户操作文件。字段支持model、mode、resolution、aspect_ratio、duration_seconds、fps、upscale、review、storyboard_images、upscale_model、delivery_resolution、audio、long_video_strategy、billing_route。默认不是能力证明：先选接入，读实际模型和费用，不能把平台不支持的选项当作已可执行。
+
+
+## 查看技巧目录（只读，不需要接入）
+
+```text
+avp technique-list
+avp technique-list --query 分镜
+avp technique-describe --id storyboarding
+```
+
+返回目录中的真实方法、简要用途、适用级别、前置能力和说明文件位置；describe另返回该技巧guide正文。runtime_verified=false，列表不能当当前节点/服务已就绪的证明。Agent负责把结果讲成用户能看懂的用途与场景，不直接回显内部JSON。

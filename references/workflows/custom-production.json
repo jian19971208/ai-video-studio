@@ -205,7 +205,27 @@
       "do_not_claim_unverified_support": true,
       "no_automatic_new_skill_or_public_library_update": true
     },
-    "discuss_creative_goal_before_requesting_technical_choices": true
+    "discuss_creative_goal_before_requesting_technical_choices": true,
+    "technique_discovery": {
+      "trigger_phrases": [
+        "列出技巧",
+        "有哪些技巧",
+        "按我的需求推荐技巧"
+      ],
+      "list_command": "technique-list",
+      "detail_command": "technique-describe --id ID",
+      "invitation": "想了解有哪些做法，可以说“列出技巧”，也可以让我按你的需求推荐。",
+      "show_invitation": "once when introducing custom production in a new conversation",
+      "show_full_catalog": "only when requested",
+      "user_columns": [
+        "name",
+        "purpose",
+        "suitable_scenarios",
+        "availability_or_requirements"
+      ],
+      "does_not_enable_optional_steps": true,
+      "does_not_require_generation_authorization": true
+    }
   },
   "long_video_options": {
     "segmented_assembly": {

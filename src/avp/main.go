@@ -23,7 +23,7 @@ import (
 
 type M = map[string]any
 
-var version = "2.6.6"
+var version = "2.6.7"
 
 func check(e error) {
 	if e != nil {
@@ -636,10 +636,12 @@ func run(a []string) any {
 	check(g.Parse(a))
 	a = g.Args()
 	if len(a) == 0 {
-		return M{"version": version, "commands": []string{"backends", "select", "defaults-save", "setup-status", "setup-item", "technique-settings", "technique-save", "technique-plan", "workflow-list", "workflow-describe", "workflow-targets", "workflow-server-check", "workflow-register", "workflow-configure", "workflow-check", "workflow-new", "config-root", "config-path", "config-reset", "init", "connect", "connect-rh", "doctor", "prepare", "media-doctor", "edit", "verify", "nodes", "models", "upload", "validate", "bind", "submit", "status", "watch", "download", "project", "gate", "inspect", "frames", "adapter", "rh"}}
+		return M{"version": version, "commands": []string{"backends", "select", "defaults-save", "setup-status", "setup-item", "technique-settings", "technique-save", "technique-plan", "technique-list", "technique-describe", "workflow-list", "workflow-describe", "workflow-targets", "workflow-server-check", "workflow-register", "workflow-configure", "workflow-check", "workflow-new", "config-root", "config-path", "config-reset", "init", "connect", "connect-rh", "doctor", "prepare", "media-doctor", "edit", "verify", "nodes", "models", "upload", "validate", "bind", "submit", "status", "watch", "download", "project", "gate", "inspect", "frames", "adapter", "rh"}}
 	}
 	cmd, a := a[0], a[1:]
 	switch cmd {
+	case "technique-list", "technique-describe":
+		return techniqueCatalogCommand(cmd, a)
 	case "workflow-server-check":
 		return localWorkflowServerCheck(*config, *profile, a)
 	case "config-reset":

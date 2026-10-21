@@ -8,7 +8,8 @@
     ],
     "rating": 5,
     "status": "核心",
-    "guide": "materials/guide.md"
+    "guide": "materials/guide.md",
+    "summary": "读取真实素材和宣传资料，提取外观、身份与内容依据。"
   },
   {
     "id": "storyboarding",
@@ -20,7 +21,8 @@
     ],
     "rating": 5,
     "status": "核心",
-    "guide": "storyboarding/guide.md"
+    "guide": "storyboarding/guide.md",
+    "summary": "先设计镜头；需要时提前生成图片确定人物、场景和构图，自定义默认不开启生图。"
   },
   {
     "id": "prompt-writing",
@@ -31,7 +33,8 @@
     ],
     "rating": 5,
     "status": "核心",
-    "guide": "prompt-writing/guide.md"
+    "guide": "prompt-writing/guide.md",
+    "summary": "按所选模型规范组织提示词，明确参考素材与镜头的对应关系。"
   },
   {
     "id": "reference-to-video",
@@ -44,7 +47,8 @@
     ],
     "rating": 5,
     "status": "默认动态路线",
-    "guide": "reference-to-video/guide.md"
+    "guide": "reference-to-video/guide.md",
+    "summary": "用图片、视频或音频等参考约束生成内容。"
   },
   {
     "id": "keyframes-and-guides",
@@ -57,7 +61,8 @@
     ],
     "rating": 3,
     "status": "按明确需求选用",
-    "guide": "keyframes-and-guides/guide.md"
+    "guide": "keyframes-and-guides/guide.md",
+    "summary": "用首尾帧或引导锚点控制状态和路径，按具体需求选用。"
   },
   {
     "id": "video-reference",
@@ -69,7 +74,8 @@
     ],
     "rating": 3,
     "status": "专项",
-    "guide": "video-reference/guide.md"
+    "guide": "video-reference/guide.md",
+    "summary": "从参考视频提取动作和运镜，白模预演需要额外渲染能力。"
   },
   {
     "id": "video-continuation",
@@ -82,7 +88,8 @@
     ],
     "rating": 3,
     "status": "长镜头需要时",
-    "guide": "video-continuation/guide.md"
+    "guide": "video-continuation/guide.md",
+    "summary": "利用前段视频的实际末状态继续生成，适合延续场景和动作。"
   },
   {
     "id": "camera-and-effects",
@@ -94,7 +101,8 @@
     ],
     "rating": 4,
     "status": "常规设计",
-    "guide": "camera-and-effects/guide.md"
+    "guide": "camera-and-effects/guide.md",
+    "summary": "设计相机运动、主体动作、灯光和背景特效。"
   },
   {
     "id": "sampling",
@@ -105,7 +113,8 @@
     ],
     "rating": 4,
     "status": "按生产阶段配置",
-    "guide": "sampling/guide.md"
+    "guide": "sampling/guide.md",
+    "summary": "按模型与资源选择清晰度、时长和采样参数。"
   },
   {
     "id": "lora-and-control",
@@ -116,7 +125,8 @@
     ],
     "rating": 2,
     "status": "退出默认，按专项需求",
-    "guide": "lora-and-control/guide.md"
+    "guide": "lora-and-control/guide.md",
+    "summary": "使用模型专用控制或局部编辑，需要对应节点和模型。"
   },
   {
     "id": "audio",
@@ -128,7 +138,8 @@
     ],
     "rating": 4,
     "status": "有声交付",
-    "guide": "audio/guide.md"
+    "guide": "audio/guide.md",
+    "summary": "安排声音、对白、配乐和剪辑节奏，实际听审依赖音频能力。"
   },
   {
     "id": "editing",
@@ -140,7 +151,8 @@
     ],
     "rating": 4,
     "status": "常规",
-    "guide": "editing/guide.md"
+    "guide": "editing/guide.md",
+    "summary": "裁切拼接、文字Logo叠加与音轨处理，依赖实际编辑工具。"
   },
   {
     "id": "upscaling",
@@ -154,7 +166,8 @@
     ],
     "rating": 4,
     "status": "原片合格后按需",
-    "guide": "upscaling/guide.md"
+    "guide": "upscaling/guide.md",
+    "summary": "提高交付分辨率；检查超分模型和资源，自定义默认关闭。"
   },
   {
     "id": "quality-review",
@@ -167,7 +180,8 @@
     ],
     "rating": 5,
     "status": "核心",
-    "guide": "quality-review/guide.md"
+    "guide": "quality-review/guide.md",
+    "summary": "对照参考检查人物或商品、动作与画面问题，自定义默认关闭。"
   },
   {
     "id": "production-control",
@@ -178,7 +192,8 @@
     ],
     "rating": 5,
     "status": "核心",
-    "guide": "production-control/guide.md"
+    "guide": "production-control/guide.md",
+    "summary": "管理授权、费用、排队、任务恢复和批量执行。"
   },
   {
     "id": "batch-creativity",
@@ -189,6 +204,7 @@
     "requires": [
       "image.inspect"
     ],
-    "rating": 5
+    "rating": 5,
+    "summary": "为多条视频设计不同概念、开场、场景和镜头，避免只换种子。"
   }
 ]
