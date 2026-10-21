@@ -166,6 +166,16 @@
       "reset_on_new_conversation": true,
       "tracking": "use current conversation history or host session state; do not persist a global already-shown flag",
       "independent_of_integration_selection_prompt": true
+    },
+    "entry_selection": {
+      "when_ambiguous": "ask existing template or custom before entering this workflow",
+      "example_ambiguous": [
+        "做个视频",
+        "我们来创作一个新的视频"
+      ],
+      "question": "你想使用现成模板，还是按你的想法自定义制作？目前模板有商品宣传。",
+      "context_explicit_choice": "reuse current context without asking again",
+      "do_not_assume_custom_from_generic_video_request": true
     }
   },
   "long_video_options": {
