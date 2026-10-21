@@ -1,0 +1,39 @@
+{
+  "id": "realesrgan-2k-local",
+  "backend_evidence": "comfyui-derived",
+  "source_record": "realesrgan-x4-local/graph.json",
+  "source_execution": "derived from historically completed x4 chunks; full 360-frame audio-preserving 2K derivative not generated",
+  "required_parameters": [
+    "loadvideo-1",
+    "n7-filename-prefix"
+  ],
+  "bindings": {
+    "loadvideo-1": "1.inputs.file",
+    "n4-model-name": "4.inputs.model_name",
+    "n7-filename-prefix": "7.inputs.filename_prefix"
+  },
+  "node_classes": [
+    "CreateVideo",
+    "GetVideoComponents",
+    "ImageFromBatch",
+    "ImageScale",
+    "ImageUpscaleWithModel",
+    "LoadVideo",
+    "SaveVideo",
+    "UpscaleModelLoader"
+  ],
+  "final_output_node": "7",
+  "graph": "graph.json",
+  "defaults": "defaults.json",
+  "fixed_output": {
+    "width": 1440,
+    "height": 2560,
+    "fps": 24,
+    "frames": 360,
+    "duration_seconds": 15,
+    "audio": "original GetVideoComponents output 1"
+  },
+  "preflight": "Read selected server object_info and model enumeration; validate exact schema, video decoding/encoding, audio and RAM/VRAM for all 360 frames; do not assume RH snapshot proves local availability.",
+  "content_verdict": "not generated; requires runtime and content verification",
+  "adaptation": true
+}

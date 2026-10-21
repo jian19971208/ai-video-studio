@@ -1,0 +1,182 @@
+{
+  "100": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "${loadvideo-1}",
+      "keep_audio": true,
+      "trim_time": "0"
+    }
+  },
+  "101": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": [
+        "100",
+        0
+      ]
+    }
+  },
+  "102": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": [
+        "101",
+        0
+      ],
+      "batch_index": "${n102-batch-index}",
+      "length": "${n102-length}"
+    }
+  },
+  "110": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "${loadvideo-2}",
+      "keep_audio": true,
+      "trim_time": "0"
+    }
+  },
+  "111": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": [
+        "110",
+        0
+      ]
+    }
+  },
+  "112": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": [
+        "111",
+        0
+      ],
+      "batch_index": "${n112-batch-index}",
+      "length": "${n112-length}"
+    }
+  },
+  "120": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "${loadvideo-3}",
+      "keep_audio": true,
+      "trim_time": "0"
+    }
+  },
+  "121": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": [
+        "120",
+        0
+      ]
+    }
+  },
+  "122": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": [
+        "121",
+        0
+      ],
+      "batch_index": "${n122-batch-index}",
+      "length": "${n122-length}"
+    }
+  },
+  "200": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "102",
+        0
+      ],
+      "image2": [
+        "112",
+        0
+      ]
+    }
+  },
+  "201": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "200",
+        0
+      ],
+      "image2": [
+        "122",
+        0
+      ]
+    }
+  },
+  "300": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "${loadvideo-4}",
+      "keep_audio": true,
+      "trim_time": "0"
+    }
+  },
+  "301": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": [
+        "300",
+        0
+      ]
+    }
+  },
+  "302": {
+    "class_type": "TrimAudioDuration",
+    "inputs": {
+      "audio": [
+        "301",
+        1
+      ],
+      "start_index": "${n302-start-index}",
+      "duration": "${n302-duration}"
+    }
+  },
+  "303": {
+    "class_type": "AudioFade",
+    "inputs": {
+      "audio": [
+        "302",
+        0
+      ],
+      "fade_in_duration": 0.25,
+      "fade_out_duration": 0.75,
+      "shape": "half_sine"
+    }
+  },
+  "400": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "images": [
+        "201",
+        0
+      ],
+      "audio": [
+        "303",
+        0
+      ],
+      "fps": "${n400-fps}",
+      "codec": "auto",
+      "bit_depth": 8,
+      "color_space": "sRGB"
+    }
+  },
+  "8003": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "400",
+        0
+      ],
+      "filename_prefix": "${n8003-filename-prefix}",
+      "format": "auto",
+      "codec": "auto",
+      "format.codec": "auto"
+    }
+  }
+}

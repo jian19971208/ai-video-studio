@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "default_profile": "",
+  "profiles": {},
+  "selection": null,
+  "production": {
+    "settings": {},
+    "workflows": {}
+  },
+  "policy": {
+    "rh_budget_coins": null
+  },
+  "dependencies": {
+    "h3_prompt_skill": "",
+    "ffmpeg": "",
+    "ffprobe": ""
+  }
+}

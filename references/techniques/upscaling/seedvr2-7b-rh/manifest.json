@@ -1,0 +1,45 @@
+{
+  "id": "seedvr2-7b-rh",
+  "backend_evidence": "runninghub-derived",
+  "source_record": "work/projects/steapx-orange-fl-guide-precision-20261016/rounds/seedvr7b_fp16_final2k_v3",
+  "source_execution": "historical RH-coin SeedVR2 7B FP16 19-second 2560x1440 execution completed; this whole-clip 15-second portrait variant is structurally derived, not newly executed",
+  "normalization": "retain successful loaders/upscaler/audio chain; remove project-specific logo bypass/padding; upscale all 360 frames; parameterize upload and output prefix",
+  "required_parameters": [
+    "input-video",
+    "output-prefix"
+  ],
+  "bindings": {
+    "input-video": "1.inputs.file",
+    "output-prefix": "8.inputs.filename_prefix"
+  },
+  "node_classes": [
+    "CreateVideo",
+    "GetVideoComponents",
+    "ImageFromBatch",
+    "ImageScale",
+    "LoadVideo",
+    "SaveVideo",
+    "SeedVR2LoadDiTModel",
+    "SeedVR2LoadVAEModel",
+    "SeedVR2VideoUpscaler",
+    "TrimAudioDuration"
+  ],
+  "fixed": {
+    "model": "seedvr2_ema_7b_fp16.safetensors",
+    "vae": "ema_vae_fp16.safetensors",
+    "width": 1440,
+    "height": 2560,
+    "fps": 24,
+    "frames": 360,
+    "duration_seconds": 15,
+    "batch_size": 5,
+    "resolution": 1440,
+    "max_resolution": 2560
+  },
+  "billing": "membership native compute, RH coins; not a commercial wallet API",
+  "content_verdict": "review exact final product/Logo texture and timing; super-resolution does not repair source product errors",
+  "input_roles": {
+    "input-video": "approved complete source video including original audio"
+  },
+  "output": "2K portrait video with source audio; retain original video"
+}

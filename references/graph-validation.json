@@ -1,0 +1,107 @@
+[
+  {
+    "id": "h3-ref-rh",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [
+      {
+        "class": "UNETLoader",
+        "field": "unet_name",
+        "recorded_model": "minimax_h3_ref2va_pruned_int8_convrot.safetensors"
+      }
+    ],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "h3-ref-local",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "h3-video-ref-local",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "h3-fl-rh",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [
+      {
+        "class": "UNETLoader",
+        "field": "unet_name",
+        "recorded_model": "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+      }
+    ],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "h3-ref-ag-local",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "three-shot-assembly-rh",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "realesrgan-x4-local",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "h3-guide-clip22-rh",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [
+      {
+        "class": "UNETLoader",
+        "field": "unet_name",
+        "recorded_model": "minimax_h3_fl2va_pruned_int8_convrot.safetensors"
+      }
+    ],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  },
+  {
+    "id": "h3-ref-continuation-rh",
+    "bind_exit": 0,
+    "validate_exit": 0,
+    "source": "recorded node definitions",
+    "model_inventory_gaps": [
+      {
+        "class": "UNETLoader",
+        "field": "unet_name",
+        "recorded_model": "minimax_h3_ref2va_pruned_int8_convrot.safetensors"
+      }
+    ],
+    "uploaded_files_checked": false,
+    "paid_execution": false
+  }
+]

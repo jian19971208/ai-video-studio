@@ -1,0 +1,407 @@
+{
+  "graphs": [
+    {
+      "id": "h3-ref-rh",
+      "path": "references/techniques/reference-to-video/h3-ref-rh",
+      "backend": "runninghub",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "ImageFromBatch",
+        "KSamplerSelect",
+        "LoadImage",
+        "MiniMaxH3ReferenceToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecode",
+        "VAEDecodeAudio",
+        "VAELoader"
+      ],
+      "source": "work/projects/steapx-orange-quality-routes-5000-20261018/rounds/shoe_ref_v2/graph.json"
+    },
+    {
+      "id": "h3-ref-local",
+      "path": "references/techniques/reference-to-video/h3-ref-local",
+      "backend": "comfyui-derived",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "ImageFromBatch",
+        "KSamplerSelect",
+        "LoadImage",
+        "MiniMaxH3ReferenceToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecodeAudio",
+        "VAEDecodeTiled",
+        "VAELoader"
+      ],
+      "source": "work/projects/steapx-orange-clay-pv15-local-20261019/server_rounds/ref_clay_pv15_v1/graph.json"
+    },
+    {
+      "id": "h3-video-ref-local",
+      "path": "references/techniques/video-reference/h3-video-ref-local",
+      "backend": "comfyui",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "GetVideoComponents",
+        "ImageFromBatch",
+        "KSamplerSelect",
+        "LoadImage",
+        "LoadVideo",
+        "MiniMaxH3ReferenceToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecodeAudio",
+        "VAEDecodeTiled",
+        "VAELoader"
+      ],
+      "source": "work/projects/steapx-orange-clay-pv15-local-20261019/server_rounds/ref_clay_pv15_v1/graph.json"
+    },
+    {
+      "id": "h3-fl-rh",
+      "path": "references/techniques/keyframes-and-guides/h3-fl-rh",
+      "backend": "runninghub",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "ImageFromBatch",
+        "ImageScale",
+        "KSamplerSelect",
+        "LoadImage",
+        "MiniMaxH3AddGuide",
+        "MiniMaxH3ImageToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecode",
+        "VAEDecodeAudio",
+        "VAELoader"
+      ],
+      "source": "work/projects/steapx-orange-motion-fx-3000-20261019/rounds/guided_fl_v3/graph.json"
+    },
+    {
+      "id": "h3-ref-ag-local",
+      "path": "references/techniques/keyframes-and-guides/h3-ref-ag-local",
+      "backend": "comfyui",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "ImageFromBatch",
+        "ImageScale",
+        "KSamplerSelect",
+        "LoadImage",
+        "MiniMaxH3AddGuide",
+        "MiniMaxH3ReferenceToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecode",
+        "VAEDecodeAudio",
+        "VAELoader"
+      ],
+      "source": "work/projects/steapx-orange-motion-fx-3000-20261019/server_rounds/server_guided_ref_v3/graph.json"
+    },
+    {
+      "id": "three-shot-assembly-rh",
+      "path": "references/techniques/editing/three-shot-assembly-rh",
+      "backend": "runninghub",
+      "classes": [
+        "AudioFade",
+        "CreateVideo",
+        "GetVideoComponents",
+        "ImageBatch",
+        "ImageFromBatch",
+        "LoadVideo",
+        "SaveVideo",
+        "TrimAudioDuration"
+      ],
+      "source": "work/projects/steapx-orange-quality-routes-5000-20261018/rounds/shoe_restrained_final_v1/graph.json"
+    },
+    {
+      "id": "realesrgan-x4-local",
+      "path": "references/techniques/upscaling/realesrgan-x4-local",
+      "backend": "comfyui",
+      "classes": [
+        "CreateVideo",
+        "GetVideoComponents",
+        "ImageFromBatch",
+        "ImageUpscaleWithModel",
+        "LoadVideo",
+        "SaveVideo",
+        "UpscaleModelLoader"
+      ],
+      "source": "work/projects/steapx-orange-clay-pv15-local-20261019/upscale4x/chunk_00/graph.json"
+    },
+    {
+      "id": "h3-guide-clip22-rh",
+      "path": "references/techniques/video-continuation/h3-guide-clip22-rh",
+      "backend": "runninghub",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "GetVideoComponents",
+        "ImageFromBatch",
+        "KSamplerSelect",
+        "LoadAudio",
+        "LoadVideo",
+        "MiniMaxH3AddGuide",
+        "MiniMaxH3ImageToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecode",
+        "VAEDecodeAudio",
+        "VAELoader"
+      ],
+      "source": "work/projects/steapx-fl-ag-director-lab-15000-20261016/rounds/terrace_continue_clip22/graph.json"
+    },
+    {
+      "id": "h3-ref-continuation-rh",
+      "path": "references/techniques/video-continuation/h3-ref-continuation-rh",
+      "backend": "runninghub",
+      "classes": [
+        "BasicGuider",
+        "BasicScheduler",
+        "CLIPLoader",
+        "CreateVideo",
+        "GetVideoComponents",
+        "ImageFromBatch",
+        "KSamplerSelect",
+        "LoadImage",
+        "LoadVideo",
+        "MiniMaxH3ReferenceToVideo",
+        "MiniMaxH3SigmaShift",
+        "RandomNoise",
+        "SamplerCustomAdvanced",
+        "SaveVideo",
+        "TrimAudioDuration",
+        "UNETLoader",
+        "VAEDecode",
+        "VAEDecodeAudio",
+        "VAELoader"
+      ],
+      "source": "work\\projects\\wedding-blessings-continuation-20261015\\rounds\\part02\\graph.json"
+    }
+  ],
+  "techniques": [
+    {
+      "id": "materials",
+      "title": "素材与产品宣传资料识别",
+      "scope": "通用；云盘/网站获取另依赖对应适配器",
+      "requires": [
+        "image.inspect"
+      ],
+      "rating": 5,
+      "status": "核心",
+      "guide": "materials/guide.md"
+    },
+    {
+      "id": "storyboarding",
+      "title": "分镜与提前生图",
+      "scope": "方法通用；生成设计图需要参考生图能力",
+      "requires": [
+        "image.inspect",
+        "image.generate.reference"
+      ],
+      "rating": 5,
+      "status": "核心",
+      "guide": "storyboarding/guide.md"
+    },
+    {
+      "id": "prompt-writing",
+      "title": "官方提示词与参考映射",
+      "scope": "模型专属；H3规范由独立Skill维护",
+      "requires": [
+        "prompt.h3.official"
+      ],
+      "rating": 5,
+      "status": "核心",
+      "guide": "prompt-writing/guide.md"
+    },
+    {
+      "id": "reference-to-video",
+      "title": "REF生成",
+      "scope": "H3模型专属实现；原生ComfyUI节点，RH需同节点支持",
+      "requires": [
+        "video.generate.reference",
+        "prompt.h3.official",
+        "image.inspect"
+      ],
+      "rating": 5,
+      "status": "默认动态路线",
+      "guide": "reference-to-video/guide.md"
+    },
+    {
+      "id": "keyframes-and-guides",
+      "title": "FL与AddGuide",
+      "scope": "H3模型/ComfyUI节点专属；不是所有平台都开放",
+      "requires": [
+        "video.generate.keyframes",
+        "video.guide.h3",
+        "image.inspect"
+      ],
+      "rating": 3,
+      "status": "按明确需求选用",
+      "guide": "keyframes-and-guides/guide.md"
+    },
+    {
+      "id": "video-reference",
+      "title": "视频参考与白模",
+      "scope": "方法通用；执行需模型视频参考能力；白模另需3D渲染",
+      "requires": [
+        "video.reference.inspect",
+        "video.generate.reference"
+      ],
+      "rating": 3,
+      "status": "专项",
+      "guide": "video-reference/guide.md"
+    },
+    {
+      "id": "video-continuation",
+      "title": "连续生成与交接",
+      "scope": "通用思路；H3 REF视频参考或H3短视频Guide实现",
+      "requires": [
+        "video.generate.reference",
+        "video.reference.inspect",
+        "media.edit"
+      ],
+      "rating": 3,
+      "status": "长镜头需要时",
+      "guide": "video-continuation/guide.md"
+    },
+    {
+      "id": "camera-and-effects",
+      "title": "运镜、运动与特效",
+      "scope": "通用镜头设计；执行服从模型/平台能力",
+      "requires": [
+        "image.inspect",
+        "video.reference.inspect"
+      ],
+      "rating": 4,
+      "status": "常规设计",
+      "guide": "camera-and-effects/guide.md"
+    },
+    {
+      "id": "sampling",
+      "title": "模型、分辨率与对照参数",
+      "scope": "模型/硬件相关，不可跨模型照抄",
+      "requires": [
+        "video.generate.reference"
+      ],
+      "rating": 4,
+      "status": "按生产阶段配置",
+      "guide": "sampling/guide.md"
+    },
+    {
+      "id": "lora-and-control",
+      "title": "LoRA、控制节点与局部编辑",
+      "scope": "模型/节点/平台专属，可选扩展",
+      "requires": [
+        "video.generate.reference"
+      ],
+      "rating": 2,
+      "status": "退出默认，按专项需求",
+      "guide": "lora-and-control/guide.md"
+    },
+    {
+      "id": "audio",
+      "title": "音轨、卡点与听审",
+      "scope": "通用；音频生成/参考/编辑各依赖对应服务",
+      "requires": [
+        "audio.audition",
+        "media.edit"
+      ],
+      "rating": 4,
+      "status": "有声交付",
+      "guide": "audio/guide.md"
+    },
+    {
+      "id": "editing",
+      "title": "程序化剪辑、文字与品牌收束",
+      "scope": "通用方法；本包原生ComfyUI编辑图，其他编辑器另适配",
+      "requires": [
+        "media.edit",
+        "media.probe"
+      ],
+      "rating": 4,
+      "status": "常规",
+      "guide": "editing/guide.md"
+    },
+    {
+      "id": "upscaling",
+      "title": "超分与分段处理",
+      "scope": "模型/节点专属；真实x4图随包",
+      "requires": [
+        "video.upscale",
+        "media.edit",
+        "media.probe",
+        "image.inspect"
+      ],
+      "rating": 4,
+      "status": "原片合格后按需",
+      "guide": "upscaling/guide.md"
+    },
+    {
+      "id": "quality-review",
+      "title": "内容验收与定向返修",
+      "scope": "通用；要求实际看图/视频，声音需试听",
+      "requires": [
+        "image.inspect",
+        "video.reference.inspect",
+        "media.probe"
+      ],
+      "rating": 5,
+      "status": "核心",
+      "guide": "quality-review/guide.md"
+    },
+    {
+      "id": "production-control",
+      "title": "自动化、预算、恢复与产能",
+      "scope": "通用流程工程；费用按各适配器实回执",
+      "requires": [
+        "media.probe"
+      ],
+      "rating": 5,
+      "status": "核心",
+      "guide": "production-control/guide.md"
+    }
+  ],
+  "workflows": [
+    "product-showcase"
+  ]
+}

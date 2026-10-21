@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "base_url": "https://www.runninghub.ai",
+  "default_profile": "",
+  "accounts": {},
+  "profiles": {
+    "member": {
+      "key_type": "consumer-membership",
+      "api_key": "",
+      "workflow_currency": "rh_coins",
+      "max_project_inflight": 1
+    },
+    "enterprise": {
+      "key_type": "enterprise-shared",
+      "api_key": "",
+      "workflow_currency": "wallet",
+      "max_project_inflight": 1
+    },
+    "dedicated": {
+      "key_type": "enterprise-dedicated",
+      "api_key": "",
+      "workflow_currency": "dedicated_resource_contract",
+      "max_project_inflight": 1,
+      "resource": {}
+    }
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Video Studio"
+  short_description: "Run local/RH product videos or custom production workflows"
+  default_prompt: "Use $ai-video-studio: run product-showcase on self-hosted ComfyUI or RunningHub, or plan a custom production workflow. Select the execution profile inside the chosen workflow; ask when several suitable profiles remain. Deliver video, HTML review and actual request parameters together."

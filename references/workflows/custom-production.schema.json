@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "id",
+    "workflow_kind",
+    "guide",
+    "supported_backends",
+    "steps"
+  ],
+  "properties": {
+    "workflow_kind": {
+      "const": "custom-planner"
+    },
+    "supported_backends": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "comfyui",
+          "runninghub-native"
+        ]
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "action",
+          "references"
+        ]
+      }
+    }
+  }
+}

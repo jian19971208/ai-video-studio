@@ -1,0 +1,13 @@
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+*.tmp
+*.log
+.idea/
+.vscode/
+/AIVideoStudio/
+/outputs/
+/delivery/
+/config.local.json
+*.zip

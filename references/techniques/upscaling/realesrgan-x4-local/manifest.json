@@ -1,0 +1,48 @@
+{
+  "id": "realesrgan-x4-local",
+  "backend_evidence": "comfyui",
+  "source_record": "work/projects/steapx-orange-clay-pv15-local-20261019/upscale4x/chunk_00/graph.json",
+  "source_execution": "completed historical execution; see content verdict separately",
+  "normalization": "uploaded inputs/prompt/seed/prefix parameterized; removed unused raw-output branches",
+  "required_parameters": [
+    "loadvideo-1",
+    "n7-filename-prefix"
+  ],
+  "bindings": {
+    "loadvideo-1": "1.inputs.file",
+    "n3-length": "3.inputs.length",
+    "n3-batch-index": "3.inputs.batch_index",
+    "n4-model-name": "4.inputs.model_name",
+    "n6-fps": "6.inputs.fps",
+    "n7-filename-prefix": "7.inputs.filename_prefix"
+  },
+  "node_classes": [
+    "CreateVideo",
+    "GetVideoComponents",
+    "ImageFromBatch",
+    "ImageUpscaleWithModel",
+    "LoadVideo",
+    "SaveVideo",
+    "UpscaleModelLoader"
+  ],
+  "final_output_node": "7",
+  "content_verdict": "upscale operation passed; original product errors retained",
+  "adaptation": false,
+  "input_roles": {
+    "loadvideo-1": {
+      "source_node": "1",
+      "direct_consumers": [
+        {
+          "node": "2",
+          "class_type": "GetVideoComponents",
+          "input": "video",
+          "output_index": 0
+        }
+      ]
+    },
+    "n7-filename-prefix": {
+      "source_node": "7",
+      "direct_consumers": []
+    }
+  }
+}

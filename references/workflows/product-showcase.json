@@ -1,0 +1,1517 @@
+{
+  "schema_version": 1,
+  "id": "product-showcase",
+  "name": "商品宣传",
+  "version": "2.6.3",
+  "status": "candidate",
+  "inputs": [
+    {
+      "name": "materials",
+      "required": true,
+      "accepts": [
+        "local-directory",
+        "manifest",
+        "file-set"
+      ],
+      "description": "本工作流使用时指定商品材料；不是所有工作流的统一必填"
+    }
+  ],
+  "asset_strategy": {
+    "mode": "mixed",
+    "recipe": "用户指定商品原图/产品宣传资料目录；必要场景和上脚分镜由已配置参考生图能力生成。",
+    "fixed_source": null,
+    "on_missing": "按guide处理；不得静默改变素材策略"
+  },
+  "requires": [
+    "materials.local.read",
+    "prompt.h3.official",
+    "video.generate.reference"
+  ],
+  "optional_capabilities": [
+    "media.edit",
+    "media.overlay.image",
+    "media.overlay.text",
+    "audio.audition",
+    "image.generate.reference",
+    "image.inspect",
+    "video.reference.inspect",
+    "video.upscale",
+    "media.probe"
+  ],
+  "creative_strategy": "每条独立策划创意与分镜，以商品真实特征为基础，保证识别与动感；批量不固定同一开场/场景/镜头顺序。",
+  "steps": [
+    {
+      "id": "configure",
+      "action": "先按selection_policy展示支持的平台和具名配置，确认本次执行接入后再收集制作输入",
+      "output": "settings.json",
+      "acceptance": "本次接入已明确，或已有用户明确设置的不再询问策略及有效绑定；历史绑定本身不等于本次确认",
+      "references": [
+        "../preflight.md",
+        "../configuration.md"
+      ],
+      "kind": "plan",
+      "provider": "host",
+      "depends_on": [],
+      "inputs": [
+        "config:workflows",
+        "config:techniques",
+        "config:integrations"
+      ],
+      "requires": [],
+      "on_failure": "stop",
+      "resume": "reuse-output",
+      "execution_domain": "host"
+    },
+    {
+      "id": "preflight",
+      "action": "按引用完成所选配置的能力检查",
+      "output": "preflight.json",
+      "acceptance": "引用的前置检查通过",
+      "references": [
+        "../preflight.md",
+        "../integrations/image-and-materials.md",
+        "delivery-quantity.md"
+      ],
+      "kind": "check",
+      "provider": "host",
+      "depends_on": [
+        "configure"
+      ],
+      "inputs": [
+        "step:configure"
+      ],
+      "requires": [],
+      "on_failure": "stop",
+      "resume": "reuse-output",
+      "execution_domain": "host"
+    },
+    {
+      "id": "intake",
+      "action": "按引用获取材料并确定商品真值",
+      "output": "source/manifest.json",
+      "acceptance": "材料满足本流程素材策略及引用标准",
+      "references": [
+        "../techniques/materials/guide.md"
+      ],
+      "kind": "acquire",
+      "provider": "host",
+      "depends_on": [
+        "preflight"
+      ],
+      "inputs": [
+        "step:preflight",
+        "workflow-input:materials"
+      ],
+      "requires": [
+        "materials.local.read"
+      ],
+      "on_failure": "stop",
+      "resume": "reuse-output",
+      "execution_domain": "host",
+      "special_instructions": "源素材必须可读取；能看图则审商品真值，缺少审图能力如实标待审，不冒充已看图，不据此丢弃可用于生成的真实参考图。"
+    },
+    {
+      "id": "creative",
+      "action": "先设计整批独立创意方向并比较差异，再落实每条内容",
+      "output": "creative.md",
+      "acceptance": "每条概念、开场与镜头设计有实际差异，素材支持的卖点真实，不以seed或同义词替换凑数",
+      "references": [
+        "../techniques/storyboarding/guide.md",
+        "../techniques/batch-creativity/guide.md"
+      ],
+      "special_instructions": "固定的是技术规格与制作过程；每条独立设计核心概念、开场、镜头目的和顺序、场景、动作及节奏。批量按差异化技巧先审整批方案，不套统一时间分镜，不以换seed或同义词替换凑数。",
+      "kind": "plan",
+      "provider": "host",
+      "depends_on": [
+        "intake"
+      ],
+      "inputs": [
+        "step:intake"
+      ],
+      "requires": [],
+      "on_failure": "stop",
+      "resume": "reuse-output",
+      "execution_domain": "host"
+    },
+    {
+      "id": "storyboard",
+      "action": "按引用执行本流程分镜设计与审图",
+      "output": "storyboards/plan.json",
+      "acceptance": "通过引用的源图验收",
+      "references": [
+        "../techniques/storyboarding/guide.md",
+        "../techniques/camera-and-effects/guide.md",
+        "../integrations/image-and-materials.md"
+      ],
+      "kind": "create",
+      "provider": "capability:image.generate.reference",
+      "depends_on": [
+        "creative"
+      ],
+      "inputs": [
+        "step:creative"
+      ],
+      "requires": [
+        "image.generate.reference",
+        "image.inspect"
+      ],
+      "on_failure": "skip-and-report",
+      "resume": "reuse-output",
+      "execution_domain": "host",
+      "special_instructions": "额外生图属于增强：可用时核实真实参考生图入口再出图和审图；不可用时保留文字镜头计划与已有商品图，继续REF生成，不另外询问批准。批量仍要创意和镜头差异，不要求每条必须先生成新图。",
+      "availability": {
+        "requires": [
+          "image.generate.reference",
+          "image.inspect"
+        ],
+        "on_missing": "skip-and-report",
+        "notice": "未确认参考生图/审图能力时不补生成场景图，使用现有商品参考图与文字镜头设计；报告说明缺项及启用方式。",
+        "enablement": "启用支持参考图的宿主生图工具或绑定图像服务，并提供审图能力。"
+      },
+      "on_skip": "step:creative"
+    },
+    {
+      "id": "prompt",
+      "action": "按引用编写已审镜头提示词",
+      "output": "prompts/shot01.txt",
+      "acceptance": "通过引用的提示词/参考映射检查",
+      "references": [
+        "../techniques/prompt-writing/guide.md"
+      ],
+      "kind": "plan",
+      "provider": "host",
+      "depends_on": [
+        "storyboard"
+      ],
+      "inputs": [
+        "step:storyboard"
+      ],
+      "requires": [
+        "prompt.h3.official"
+      ],
+      "on_failure": "stop",
+      "resume": "reuse-output",
+      "execution_domain": "host"
+    },
+    {
+      "id": "generate",
+      "action": "按所引REF策略执行已审整片计划",
+      "output": "execution/BACKEND/jobs/JOB/task.json",
+      "acceptance": "取得引用所需的执行与下载证据",
+      "references": [
+        "../techniques/reference-to-video/guide.md",
+        "../techniques/sampling/guide.md",
+        "../techniques/production-control/guide.md"
+      ],
+      "special_instructions": "固定H3 REF、20步，无AG/LoRA/Turbo。每个成品一次整段生成，按已确认数量执行，不因审查不满意自行重抽。已有ID恢复原任务。",
+      "kind": "create",
+      "provider": "selected-integration",
+      "depends_on": [
+        "prompt",
+        "preflight"
+      ],
+      "inputs": [
+        "step:prompt",
+        "step:preflight"
+      ],
+      "requires": [
+        "video.generate.reference"
+      ],
+      "on_failure": "stop",
+      "resume": "same-task",
+      "execution_domain": "selected"
+    },
+    {
+      "id": "review",
+      "action": "按引用审查镜头并应用本流程验收重点",
+      "output": "review/shots.json",
+      "acceptance": "按引用记录通过范围和问题，满足本流程验收重点",
+      "references": [
+        "../techniques/quality-review/guide.md",
+        "../techniques/audio/guide.md"
+      ],
+      "special_instructions": "每条必须有HTML报告，按现有能力完成画面、商品与技术检查；无法看图/全片播放/试听的维度写待审、原因与补齐方式，不称通过，不以增强检查缺失阻塞模型视频生成。",
+      "kind": "review",
+      "provider": "host",
+      "depends_on": [
+        "generate",
+        "intake"
+      ],
+      "inputs": [
+        "step:generate",
+        "step:intake"
+      ],
+      "requires": [],
+      "on_failure": "stop",
+      "resume": "review-state",
+      "execution_domain": "host"
+    },
+    {
+      "id": "edit",
+      "action": "按固定版式添加品牌Logo和一个确认卖点的字幕，保留原音轨",
+      "output": "delivery/edit.json",
+      "acceptance": "通过引用的成片验收与本流程节奏要求",
+      "references": [
+        "../techniques/editing/guide.md",
+        "../techniques/audio/guide.md",
+        "../techniques/quality-review/guide.md"
+      ],
+      "special_instructions": "按固定版式叠加真实Logo和确认卖点，保留原音轨，不重剪镜头或自动重生成。缺叠加服务/资产提前告知；审查问题保留在对应报告中，不把处理成功称为质量合格。",
+      "availability": {
+        "requires": [
+          "media.edit",
+          "media.overlay.image",
+          "media.overlay.text"
+        ],
+        "on_missing": "skip-and-report",
+        "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。"
+      },
+      "kind": "process",
+      "provider": "capability:media.edit",
+      "depends_on": [
+        "review"
+      ],
+      "inputs": [
+        "step:review"
+      ],
+      "requires": [
+        "media.edit",
+        "media.overlay.image",
+        "media.overlay.text"
+      ],
+      "on_failure": "skip-and-report",
+      "resume": "reuse-output",
+      "on_skip": "step:review",
+      "execution_domain": "selected"
+    },
+    {
+      "id": "upscale",
+      "action": "按已选接入的内部超分实现交付1440×2560，保留原音轨",
+      "output": "delivery/upscale.json",
+      "acceptance": "成功则交付超分视频并检查原音轨/帧数；不可用或失败则保留生成原片，说明原因和需要补的条件",
+      "references": [
+        "../techniques/upscaling/guide.md",
+        "integration-selection.md"
+      ],
+      "special_instructions": "自动尝试现有增强能力，不询问开关。超分不是完成制作的门槛；能力/预算不足或任务失败就保留可用原片并记录，无法确认已有任务状态先核查原ID，不重复提交、不重新生成原视频。",
+      "kind": "process",
+      "provider": "capability:video.upscale",
+      "depends_on": [
+        "edit"
+      ],
+      "inputs": [
+        "step:edit"
+      ],
+      "requires": [
+        "video.upscale"
+      ],
+      "on_failure": "skip-and-report",
+      "resume": "same-task",
+      "execution_domain": "selected",
+      "availability": {
+        "requires": [
+          "video.upscale"
+        ],
+        "on_missing": "skip-and-report",
+        "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。",
+        "enablement": "按本次已选平台补齐对应超分权重、节点/资源或预算，不跨平台、不自动安装。"
+      },
+      "on_skip": "step:edit"
+    },
+    {
+      "id": "deliver",
+      "action": "按引用完成交付记录与验收",
+      "output": "delivery/{name}-审查报告.html",
+      "acceptance": "通过引用的交付门，未通过项按引用处理",
+      "references": [
+        "../techniques/quality-review/guide.md",
+        "records.md"
+      ],
+      "kind": "deliver",
+      "provider": "host",
+      "depends_on": [
+        "upscale",
+        "review"
+      ],
+      "inputs": [
+        "step:upscale",
+        "step:review"
+      ],
+      "requires": [],
+      "on_failure": "stop",
+      "resume": "reuse-output",
+      "execution_domain": "host",
+      "special_instructions": "以可播放模型成片为完成目标。交付成片MP4、HTML审查报告、实际请求参数；没做超分则成片就是生成分辨率的原视频且不重复附同一文件。做过超分才另附原片。报告列未做步骤、实际原因、启用所需条件；增强缺失不算核心制作失败。"
+    }
+  ],
+  "delivery": {
+    "duration_seconds": 15,
+    "fps": 24,
+    "width": 1440,
+    "height": 2560,
+    "format": "mp4",
+    "audio": "preserve-original-track; auditioned if available, otherwise pending in HTML report",
+    "settings_source": "固定规格取configuration.fixed；每个成品附对应审查报告，数量取本次订单，不把质量问题隐藏为合格。",
+    "files": {
+      "required": [
+        "{name}.mp4",
+        "{name}-审查报告.html",
+        "{name}-请求参数.json"
+      ],
+      "only_if_upscaled": [
+        "{name}-原片.mp4"
+      ],
+      "internal_records_outside_delivery": true
+    },
+    "fallback": {
+      "width": 576,
+      "height": 1024,
+      "audio": "generated original track",
+      "when": "upscale unavailable, unsupported, fails or lacks authorized budget"
+    },
+    "resolution_policy": "Deliver generated model video; 2K is a best-effort enhancement, original resolution is a valid completed delivery. Record actual dimensions."
+  },
+  "stop": {
+    "max_revisions_per_shot": 0,
+    "budget_source": "installation-policy-or-user-authorization",
+    "on_unknown_submission": "inspect-existing-receipt",
+    "on_repeat_failure": "stop-and-report",
+    "max_generations_source": "confirmed production_order.count; one video generation per output, no automatic quality retries"
+  },
+  "guide": "product-showcase.md",
+  "configuration": {
+    "parameters": {},
+    "confirmation": "固定制作方法不变；只确认成品数量，可附预算上限，不要求选择审查或返修模式。补齐素材、输出位置和必要服务绑定。",
+    "validation_capability": "video.plan.compatible",
+    "conditional_requires": [],
+    "preflight_guide": "../preflight.md",
+    "technique_bindings": {},
+    "fixed": {
+      "model": "minimax-h3-ref2va",
+      "duration_seconds": 15,
+      "generation_width": 576,
+      "generation_height": 1024,
+      "fps": 24,
+      "upscale": true,
+      "delivery_width": 1440,
+      "delivery_height": 2560,
+      "post_edit": "auto"
+    },
+    "recipe_locked": true,
+    "execution_locked": true
+  },
+  "step_contract_version": 1,
+  "portability": {
+    "scope": "portable"
+  },
+  "technique_requirements": {
+    "materials": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "storyboarding": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "camera-and-effects": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "prompt-writing": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "reference-to-video": {
+      "default_provider": "workflow",
+      "bind_to_workflow": true,
+      "fixed_settings": {
+        "model": "minimax-h3-ref2va"
+      },
+      "execution_domain": "selected"
+    },
+    "sampling": {
+      "default_provider": "workflow",
+      "bind_to_workflow": true,
+      "fixed_settings": {
+        "steps": 20,
+        "ag": false,
+        "lora": false,
+        "turbo": false
+      },
+      "execution_domain": "selected"
+    },
+    "production-control": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "quality-review": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "audio": {
+      "default_provider": "host",
+      "execution_domain": "host"
+    },
+    "editing": {
+      "default_provider": "workflow",
+      "execution_domain": "selected",
+      "on_missing": "skip-and-report",
+      "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。",
+      "fixed_settings": {
+        "mode": "auto"
+      }
+    },
+    "upscaling": {
+      "default_provider": "workflow",
+      "fixed_settings": {
+        "width": 1440,
+        "height": 2560
+      },
+      "execution_domain": "selected",
+      "on_missing": "skip-and-report",
+      "bind_to_workflow": true,
+      "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。"
+    }
+  },
+  "method": {
+    "model": "MiniMax H3 REF",
+    "sampling": "20步；无AG、LoRA或Turbo",
+    "creative_structure": "每条独立的创意与镜头结构；固定的是制作流程和技术规格，不是所有视频的分镜模板。",
+    "generation": "每条一次15秒整段REF；按确认成品数量运行，每条附审查报告，不自动质量返修。",
+    "steps": [
+      "configure",
+      "preflight",
+      "intake",
+      "creative",
+      "storyboard",
+      "prompt",
+      "generate",
+      "review",
+      "edit",
+      "upscale",
+      "deliver"
+    ],
+    "upscaling": "自动尝试所选平台的超分实现；不可用/失败/预算不足则不做，交付生成原片并说明原因和启用条件。",
+    "editing": "已审原片保留原音轨；按固定版式叠加真实Logo及一个确认卖点。缺少叠加服务/资产提前告知，本流程允许交付不含额外叠加的已审原片。"
+  },
+  "execution_plan": [
+    {
+      "step": "generate",
+      "operation": "H3 REF整段生成15秒576×1024竖屏视频",
+      "execution_domain": "selected",
+      "required": true,
+      "on_missing": "stop"
+    },
+    {
+      "step": "review",
+      "operation": "检查画面、商品结构、动作、文字和声音",
+      "execution_domain": "host",
+      "required": true,
+      "on_missing": "stop"
+    },
+    {
+      "step": "edit",
+      "operation": "保留原音轨，叠加真实品牌Logo及一个确认卖点字幕",
+      "execution_domain": "selected",
+      "required": false,
+      "on_missing": "skip-and-report",
+      "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。"
+    },
+    {
+      "step": "upscale",
+      "operation": "所选接入内超分到1440×2560，保留原音轨",
+      "execution_domain": "selected",
+      "billing": "according-to-selected-integration",
+      "required": false,
+      "on_missing": "skip-and-report",
+      "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。"
+    },
+    {
+      "step": "deliver",
+      "operation": "交付可播放模型成片、HTML报告和实际请求参数；增强成功用增强版，否则用生成原片",
+      "execution_domain": "selected",
+      "required": true,
+      "on_missing": "stop"
+    }
+  ],
+  "capability_checks": {
+    "image.generate.reference": {
+      "reference_image_tool": true,
+      "scope": "current-session-or-bound-image-service"
+    }
+  },
+  "production_order": {
+    "required": [
+      "count"
+    ],
+    "optional": [
+      "budget_coins"
+    ],
+    "review_required": true,
+    "report_per_output": true,
+    "automatic_paid_repair": false,
+    "guide": "delivery-quantity.md"
+  },
+  "review_policy": {
+    "audio": {
+      "capability": "audio.audition",
+      "required_for_generation": false,
+      "on_missing": "preserve-original-track-and-report-pending",
+      "notice": "保留生成原音轨，声音待试听；继续画面与技术审查，不需复制流程或额外批准。"
+    }
+  },
+  "supported_backends": [
+    "comfyui",
+    "runninghub-native"
+  ],
+  "integration_policy": {
+    "selection_scope": "workflow",
+    "guide": "integration-selection.md"
+  },
+  "execution_graphs": {
+    "generation_and_upscale": "resolved from the selected backend variant; do not execute an unresolved branch"
+  },
+  "batch_creativity": {
+    "required_when_count_gt": 1,
+    "guide": "../techniques/batch-creativity/guide.md",
+    "fields": [
+      "id",
+      "concept",
+      "hook",
+      "scene",
+      "shot_design",
+      "camera_action",
+      "pacing"
+    ],
+    "distinct_concept_and_shot_design": true,
+    "minimum_different_dimensions": 3,
+    "semantic_review_capability": "production.batch.reviewed",
+    "seed_or_wording_changes_do_not_count": true
+  },
+  "backend_variants": {
+    "runninghub-native": {
+      "steps": [
+        {
+          "id": "configure",
+          "action": "读取固定交付方案并补齐运行环境绑定",
+          "output": "settings.json",
+          "acceptance": "固定方法未改变，成品数量明确；预算可选，素材、输出位置和绑定明确",
+          "references": [
+            "../preflight.md",
+            "../configuration.md"
+          ],
+          "kind": "plan",
+          "provider": "host",
+          "depends_on": [],
+          "inputs": [
+            "config:workflows",
+            "config:techniques",
+            "config:integrations"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "preflight",
+          "action": "按引用完成所选配置的能力检查",
+          "output": "preflight.json",
+          "acceptance": "引用的前置检查通过",
+          "references": [
+            "../preflight.md",
+            "../integrations/image-and-materials.md",
+            "delivery-quantity.md"
+          ],
+          "kind": "check",
+          "provider": "host",
+          "depends_on": [
+            "configure"
+          ],
+          "inputs": [
+            "step:configure"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "intake",
+          "action": "按引用获取材料并确定商品真值",
+          "output": "source/manifest.json",
+          "acceptance": "材料满足本流程素材策略及引用标准",
+          "references": [
+            "../techniques/materials/guide.md"
+          ],
+          "kind": "acquire",
+          "provider": "host",
+          "depends_on": [
+            "preflight"
+          ],
+          "inputs": [
+            "step:preflight",
+            "workflow-input:materials"
+          ],
+          "requires": [
+            "materials.local.read"
+          ],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host",
+          "special_instructions": "源素材必须可读取；能看图则审商品真值，缺少审图能力如实标待审，不冒充已看图，不据此丢弃可用于生成的真实参考图。"
+        },
+        {
+          "id": "creative",
+          "action": "先设计整批独立创意方向并比较差异，再落实每条内容",
+          "output": "creative.md",
+          "acceptance": "每条概念、开场与镜头设计有实际差异，素材支持的卖点真实，不以seed或同义词替换凑数",
+          "references": [
+            "../techniques/storyboarding/guide.md",
+            "../techniques/batch-creativity/guide.md"
+          ],
+          "special_instructions": "固定的是技术规格与制作过程；每条独立设计核心概念、开场、镜头目的和顺序、场景、动作及节奏。批量按差异化技巧先审整批方案，不套统一时间分镜，不以换seed或同义词替换凑数。",
+          "kind": "plan",
+          "provider": "host",
+          "depends_on": [
+            "intake"
+          ],
+          "inputs": [
+            "step:intake"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "storyboard",
+          "action": "按引用执行本流程分镜设计与审图",
+          "output": "storyboards/plan.json",
+          "acceptance": "通过引用的源图验收",
+          "references": [
+            "../techniques/storyboarding/guide.md",
+            "../techniques/camera-and-effects/guide.md",
+            "../integrations/image-and-materials.md"
+          ],
+          "kind": "create",
+          "provider": "capability:image.generate.reference",
+          "depends_on": [
+            "creative"
+          ],
+          "inputs": [
+            "step:creative"
+          ],
+          "requires": [
+            "image.generate.reference",
+            "image.inspect"
+          ],
+          "on_failure": "skip-and-report",
+          "resume": "reuse-output",
+          "execution_domain": "host",
+          "special_instructions": "额外生图属于增强：可用时核实真实参考生图入口再出图和审图；不可用时保留文字镜头计划与已有商品图，继续REF生成，不另外询问批准。批量仍要创意和镜头差异，不要求每条必须先生成新图。",
+          "availability": {
+            "requires": [
+              "image.generate.reference",
+              "image.inspect"
+            ],
+            "on_missing": "skip-and-report",
+            "notice": "未确认参考生图/审图能力时不补生成场景图，使用现有商品参考图与文字镜头设计；报告说明缺项及启用方式。",
+            "enablement": "启用支持参考图的宿主生图工具或绑定图像服务，并提供审图能力。"
+          },
+          "on_skip": "step:creative"
+        },
+        {
+          "id": "prompt",
+          "action": "按引用编写已审镜头提示词",
+          "output": "prompts/shot01.txt",
+          "acceptance": "通过引用的提示词/参考映射检查",
+          "references": [
+            "../techniques/prompt-writing/guide.md"
+          ],
+          "kind": "plan",
+          "provider": "host",
+          "depends_on": [
+            "storyboard"
+          ],
+          "inputs": [
+            "step:storyboard"
+          ],
+          "requires": [
+            "prompt.h3.official"
+          ],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "generate",
+          "action": "按所引REF策略执行已审整片计划",
+          "output": "execution/BACKEND/jobs/JOB/task.json",
+          "acceptance": "取得引用所需的执行与下载证据",
+          "references": [
+            "../techniques/reference-to-video/guide.md",
+            "../techniques/sampling/guide.md",
+            "../techniques/production-control/guide.md"
+          ],
+          "special_instructions": "固定H3 REF、20步，无AG/LoRA/Turbo。每个成品一次整段生成，按已确认数量执行，不因审查不满意自行重抽。已有ID恢复原任务。",
+          "kind": "create",
+          "provider": "selected-integration",
+          "depends_on": [
+            "prompt",
+            "preflight"
+          ],
+          "inputs": [
+            "step:prompt",
+            "step:preflight"
+          ],
+          "requires": [
+            "video.generate.reference"
+          ],
+          "on_failure": "stop",
+          "resume": "same-task",
+          "execution_domain": "cloud"
+        },
+        {
+          "id": "review",
+          "action": "按引用审查镜头并应用本流程验收重点",
+          "output": "review/shots.json",
+          "acceptance": "按引用记录通过范围和问题，满足本流程验收重点",
+          "references": [
+            "../techniques/quality-review/guide.md",
+            "../techniques/audio/guide.md"
+          ],
+          "special_instructions": "每条必须有HTML报告，按现有能力完成画面、商品与技术检查；无法看图/全片播放/试听的维度写待审、原因与补齐方式，不称通过，不以增强检查缺失阻塞模型视频生成。",
+          "kind": "review",
+          "provider": "host",
+          "depends_on": [
+            "generate",
+            "intake"
+          ],
+          "inputs": [
+            "step:generate",
+            "step:intake"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "review-state",
+          "execution_domain": "host"
+        },
+        {
+          "id": "edit",
+          "action": "按固定版式添加品牌Logo和一个确认卖点的字幕，保留原音轨",
+          "output": "delivery/edit.json",
+          "acceptance": "通过引用的成片验收与本流程节奏要求",
+          "references": [
+            "../techniques/editing/guide.md",
+            "../techniques/audio/guide.md",
+            "../techniques/quality-review/guide.md"
+          ],
+          "special_instructions": "按固定版式叠加真实Logo和确认卖点，保留原音轨，不重剪镜头或自动重生成。缺叠加服务/资产提前告知；审查问题保留在对应报告中，不把处理成功称为质量合格。",
+          "availability": {
+            "requires": [
+              "media.edit",
+              "media.overlay.image",
+              "media.overlay.text"
+            ],
+            "on_missing": "skip-and-report",
+            "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。"
+          },
+          "kind": "process",
+          "provider": "capability:media.edit",
+          "depends_on": [
+            "review"
+          ],
+          "inputs": [
+            "step:review"
+          ],
+          "requires": [
+            "media.edit",
+            "media.overlay.image",
+            "media.overlay.text"
+          ],
+          "on_failure": "skip-and-report",
+          "resume": "reuse-output",
+          "on_skip": "step:review",
+          "execution_domain": "cloud"
+        },
+        {
+          "id": "upscale",
+          "action": "使用RH SeedVR2 7B超分为1440×2560，保留24fps和原音轨",
+          "output": "delivery/upscale.json",
+          "acceptance": "成功则交付超分视频并检查原音轨/帧数；不可用或失败则保留生成原片，说明原因和需要补的条件",
+          "references": [
+            "../techniques/upscaling/guide.md",
+            "../techniques/upscaling/seedvr2-7b-rh/manifest.json",
+            "../techniques/quality-review/guide.md"
+          ],
+          "special_instructions": "自动尝试现有增强能力，不询问开关。超分不是完成制作的门槛；能力/预算不足或任务失败就保留可用原片并记录，无法确认已有任务状态先核查原ID，不重复提交、不重新生成原视频。",
+          "kind": "process",
+          "provider": "capability:video.upscale",
+          "depends_on": [
+            "edit"
+          ],
+          "inputs": [
+            "step:edit"
+          ],
+          "requires": [
+            "video.upscale"
+          ],
+          "on_failure": "skip-and-report",
+          "resume": "same-task",
+          "execution_domain": "cloud",
+          "availability": {
+            "requires": [
+              "video.upscale"
+            ],
+            "on_missing": "skip-and-report",
+            "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。",
+            "enablement": "按本次已选平台补齐对应超分权重、节点/资源或预算，不跨平台、不自动安装。"
+          },
+          "on_skip": "step:edit"
+        },
+        {
+          "id": "deliver",
+          "action": "按引用完成交付记录与验收",
+          "output": "delivery/{name}-审查报告.html",
+          "acceptance": "通过引用的交付门，未通过项按引用处理",
+          "references": [
+            "../techniques/quality-review/guide.md",
+            "records.md"
+          ],
+          "kind": "deliver",
+          "provider": "host",
+          "depends_on": [
+            "upscale",
+            "review"
+          ],
+          "inputs": [
+            "step:upscale",
+            "step:review"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host",
+          "special_instructions": "以可播放模型成片为完成目标。交付成片MP4、HTML审查报告、实际请求参数；没做超分则成片就是生成分辨率的原视频且不重复附同一文件。做过超分才另附原片。报告列未做步骤、实际原因、启用所需条件；增强缺失不算核心制作失败。"
+        }
+      ],
+      "execution_plan": [
+        {
+          "step": "generate",
+          "operation": "H3 REF整段生成15秒576×1024竖屏视频",
+          "execution_domain": "cloud",
+          "required": true,
+          "on_missing": "stop"
+        },
+        {
+          "step": "review",
+          "operation": "检查画面、商品结构、动作、文字和声音",
+          "execution_domain": "host",
+          "required": true,
+          "on_missing": "stop"
+        },
+        {
+          "step": "edit",
+          "operation": "保留原音轨，叠加真实品牌Logo及一个确认卖点字幕",
+          "execution_domain": "cloud",
+          "required": false,
+          "on_missing": "skip-and-report",
+          "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。"
+        },
+        {
+          "step": "upscale",
+          "operation": "SeedVR2 7B FP16超分至1440×2560，保留24fps和原音轨",
+          "execution_domain": "cloud",
+          "billing": "rh_coins",
+          "required": false,
+          "on_missing": "skip-and-report",
+          "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。"
+        },
+        {
+          "step": "deliver",
+          "operation": "交付可播放模型成片、HTML报告和实际请求参数；增强成功用增强版，否则用生成原片",
+          "execution_domain": "selected",
+          "required": true,
+          "on_missing": "stop"
+        }
+      ],
+      "technique_requirements": {
+        "materials": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "storyboarding": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "camera-and-effects": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "prompt-writing": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "reference-to-video": {
+          "default_provider": "workflow",
+          "bind_to_workflow": true,
+          "fixed_settings": {
+            "model": "minimax-h3-ref2va"
+          },
+          "execution_domain": "selected"
+        },
+        "sampling": {
+          "default_provider": "workflow",
+          "bind_to_workflow": true,
+          "fixed_settings": {
+            "steps": 20,
+            "ag": false,
+            "lora": false,
+            "turbo": false
+          },
+          "execution_domain": "selected"
+        },
+        "production-control": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "quality-review": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "audio": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "editing": {
+          "default_provider": "workflow",
+          "execution_domain": "selected",
+          "on_missing": "skip-and-report",
+          "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。",
+          "fixed_settings": {
+            "mode": "auto"
+          }
+        },
+        "upscaling": {
+          "default_provider": "workflow",
+          "fixed_settings": {
+            "model": "seedvr2_ema_7b_fp16.safetensors",
+            "vae": "ema_vae_fp16.safetensors",
+            "batch_size": 5,
+            "width": 1440,
+            "height": 2560
+          },
+          "execution_domain": "cloud",
+          "on_missing": "skip-and-report",
+          "bind_to_workflow": true,
+          "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。"
+        }
+      },
+      "execution_graphs": {
+        "generate": "../techniques/reference-to-video/h3-ref-rh/manifest.json",
+        "upscale": "../techniques/upscaling/seedvr2-7b-rh/manifest.json"
+      },
+      "method": {
+        "model": "MiniMax H3 REF",
+        "sampling": "20步；无AG、LoRA或Turbo",
+        "creative_structure": "每条独立的创意与镜头结构；固定的是制作流程和技术规格，不是所有视频的分镜模板。",
+        "generation": "每条一次15秒整段REF；按确认成品数量运行，每条附审查报告，不自动质量返修。",
+        "steps": [
+          "configure",
+          "preflight",
+          "intake",
+          "creative",
+          "storyboard",
+          "prompt",
+          "generate",
+          "review",
+          "edit",
+          "upscale",
+          "deliver"
+        ],
+        "upscaling": "能力和授权预算允许时，在所选RH用SeedVR2 7B超分到1440×2560；不满足或失败则交付生成原片，说明缺项和启用条件。",
+        "editing": "已审原片保留原音轨；按固定版式叠加真实Logo及一个确认卖点。缺少叠加服务/资产提前告知，本流程允许交付不含额外叠加的已审原片。"
+      },
+      "integration_policy": {
+        "required_backend": "runninghub-native",
+        "credential_type": "consumer-membership",
+        "selection_scope": "workflow",
+        "guide": "integration-selection.md"
+      }
+    },
+    "comfyui": {
+      "steps": [
+        {
+          "id": "configure",
+          "action": "读取固定交付方案并补齐运行环境绑定",
+          "output": "settings.json",
+          "acceptance": "固定方法未改变，成品数量明确；预算可选，素材、输出位置和绑定明确",
+          "references": [
+            "../preflight.md",
+            "../configuration.md"
+          ],
+          "kind": "plan",
+          "provider": "host",
+          "depends_on": [],
+          "inputs": [
+            "config:workflows",
+            "config:techniques",
+            "config:integrations"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "preflight",
+          "action": "按引用完成所选配置的能力检查",
+          "output": "preflight.json",
+          "acceptance": "引用的前置检查通过",
+          "references": [
+            "../preflight.md",
+            "../integrations/image-and-materials.md",
+            "delivery-quantity.md"
+          ],
+          "kind": "check",
+          "provider": "host",
+          "depends_on": [
+            "configure"
+          ],
+          "inputs": [
+            "step:configure"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "intake",
+          "action": "按引用获取材料并确定商品真值",
+          "output": "source/manifest.json",
+          "acceptance": "材料满足本流程素材策略及引用标准",
+          "references": [
+            "../techniques/materials/guide.md"
+          ],
+          "kind": "acquire",
+          "provider": "host",
+          "depends_on": [
+            "preflight"
+          ],
+          "inputs": [
+            "step:preflight",
+            "workflow-input:materials"
+          ],
+          "requires": [
+            "materials.local.read"
+          ],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host",
+          "special_instructions": "源素材必须可读取；能看图则审商品真值，缺少审图能力如实标待审，不冒充已看图，不据此丢弃可用于生成的真实参考图。"
+        },
+        {
+          "id": "creative",
+          "action": "先设计整批独立创意方向并比较差异，再落实每条内容",
+          "output": "creative.md",
+          "acceptance": "每条概念、开场与镜头设计有实际差异，素材支持的卖点真实，不以seed或同义词替换凑数",
+          "references": [
+            "../techniques/storyboarding/guide.md",
+            "../techniques/batch-creativity/guide.md"
+          ],
+          "special_instructions": "固定的是技术规格与制作过程；每条独立设计核心概念、开场、镜头目的和顺序、场景、动作及节奏。批量按差异化技巧先审整批方案，不套统一时间分镜，不以换seed或同义词替换凑数。",
+          "kind": "plan",
+          "provider": "host",
+          "depends_on": [
+            "intake"
+          ],
+          "inputs": [
+            "step:intake"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "storyboard",
+          "action": "按引用执行本流程分镜设计与审图",
+          "output": "storyboards/plan.json",
+          "acceptance": "通过引用的源图验收",
+          "references": [
+            "../techniques/storyboarding/guide.md",
+            "../techniques/camera-and-effects/guide.md",
+            "../integrations/image-and-materials.md"
+          ],
+          "kind": "create",
+          "provider": "capability:image.generate.reference",
+          "depends_on": [
+            "creative"
+          ],
+          "inputs": [
+            "step:creative"
+          ],
+          "requires": [
+            "image.generate.reference",
+            "image.inspect"
+          ],
+          "on_failure": "skip-and-report",
+          "resume": "reuse-output",
+          "execution_domain": "host",
+          "special_instructions": "额外生图属于增强：可用时核实真实参考生图入口再出图和审图；不可用时保留文字镜头计划与已有商品图，继续REF生成，不另外询问批准。批量仍要创意和镜头差异，不要求每条必须先生成新图。",
+          "availability": {
+            "requires": [
+              "image.generate.reference",
+              "image.inspect"
+            ],
+            "on_missing": "skip-and-report",
+            "notice": "未确认参考生图/审图能力时不补生成场景图，使用现有商品参考图与文字镜头设计；报告说明缺项及启用方式。",
+            "enablement": "启用支持参考图的宿主生图工具或绑定图像服务，并提供审图能力。"
+          },
+          "on_skip": "step:creative"
+        },
+        {
+          "id": "prompt",
+          "action": "按引用编写已审镜头提示词",
+          "output": "prompts/shot01.txt",
+          "acceptance": "通过引用的提示词/参考映射检查",
+          "references": [
+            "../techniques/prompt-writing/guide.md"
+          ],
+          "kind": "plan",
+          "provider": "host",
+          "depends_on": [
+            "storyboard"
+          ],
+          "inputs": [
+            "step:storyboard"
+          ],
+          "requires": [
+            "prompt.h3.official"
+          ],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host"
+        },
+        {
+          "id": "generate",
+          "action": "按所引REF策略执行已审整片计划",
+          "output": "execution/BACKEND/jobs/JOB/task.json",
+          "acceptance": "取得引用所需的执行与下载证据",
+          "references": [
+            "../techniques/reference-to-video/guide.md",
+            "../techniques/sampling/guide.md",
+            "../techniques/production-control/guide.md"
+          ],
+          "special_instructions": "固定H3 REF、20步，无AG/LoRA/Turbo。每个成品一次整段生成，按已确认数量执行，不因审查不满意自行重抽。已有ID恢复原任务。 使用自建原生H3 REF及实际已安装兼容权重，不使用Comfy Cloud商业节点。",
+          "kind": "create",
+          "provider": "selected-integration",
+          "depends_on": [
+            "prompt",
+            "preflight"
+          ],
+          "inputs": [
+            "step:prompt",
+            "step:preflight"
+          ],
+          "requires": [
+            "video.generate.reference"
+          ],
+          "on_failure": "stop",
+          "resume": "same-task",
+          "execution_domain": "self-hosted"
+        },
+        {
+          "id": "review",
+          "action": "按引用审查镜头并应用本流程验收重点",
+          "output": "review/shots.json",
+          "acceptance": "按引用记录通过范围和问题，满足本流程验收重点",
+          "references": [
+            "../techniques/quality-review/guide.md",
+            "../techniques/audio/guide.md"
+          ],
+          "special_instructions": "每条必须有HTML报告，按现有能力完成画面、商品与技术检查；无法看图/全片播放/试听的维度写待审、原因与补齐方式，不称通过，不以增强检查缺失阻塞模型视频生成。",
+          "kind": "review",
+          "provider": "host",
+          "depends_on": [
+            "generate",
+            "intake"
+          ],
+          "inputs": [
+            "step:generate",
+            "step:intake"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "review-state",
+          "execution_domain": "host"
+        },
+        {
+          "id": "edit",
+          "action": "按固定版式添加品牌Logo和一个确认卖点的字幕，保留原音轨",
+          "output": "delivery/edit.json",
+          "acceptance": "通过引用的成片验收与本流程节奏要求",
+          "references": [
+            "../techniques/editing/guide.md",
+            "../techniques/audio/guide.md",
+            "../techniques/quality-review/guide.md"
+          ],
+          "special_instructions": "按固定版式叠加真实Logo和确认卖点，保留原音轨，不重剪镜头或自动重生成。缺叠加服务/资产提前告知；审查问题保留在对应报告中，不把处理成功称为质量合格。",
+          "availability": {
+            "requires": [
+              "media.edit",
+              "media.overlay.image",
+              "media.overlay.text"
+            ],
+            "on_missing": "skip-and-report",
+            "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。"
+          },
+          "kind": "process",
+          "provider": "capability:media.edit",
+          "depends_on": [
+            "review"
+          ],
+          "inputs": [
+            "step:review"
+          ],
+          "requires": [
+            "media.edit",
+            "media.overlay.image",
+            "media.overlay.text"
+          ],
+          "on_failure": "skip-and-report",
+          "resume": "reuse-output",
+          "on_skip": "step:review",
+          "execution_domain": "self-hosted"
+        },
+        {
+          "id": "upscale",
+          "action": "在同一自建ComfyUI超分并缩至1440×2560，保留原音轨",
+          "output": "delivery/upscale.json",
+          "acceptance": "成功则交付超分视频并检查原音轨/帧数；不可用或失败则保留生成原片，说明原因和需要补的条件",
+          "references": [
+            "../techniques/upscaling/guide.md",
+            "../techniques/upscaling/realesrgan-2k-local/manifest.json",
+            "../techniques/quality-review/guide.md"
+          ],
+          "special_instructions": "自动尝试现有增强能力，不询问开关。超分不是完成制作的门槛；能力/预算不足或任务失败就保留可用原片并记录，无法确认已有任务状态先核查原ID，不重复提交、不重新生成原视频。",
+          "kind": "process",
+          "provider": "capability:video.upscale",
+          "depends_on": [
+            "edit"
+          ],
+          "inputs": [
+            "step:edit"
+          ],
+          "requires": [
+            "video.upscale"
+          ],
+          "on_failure": "skip-and-report",
+          "resume": "same-task",
+          "execution_domain": "self-hosted",
+          "availability": {
+            "requires": [
+              "video.upscale"
+            ],
+            "on_missing": "skip-and-report",
+            "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。",
+            "enablement": "按本次已选平台补齐对应超分权重、节点/资源或预算，不跨平台、不自动安装。"
+          },
+          "on_skip": "step:edit"
+        },
+        {
+          "id": "deliver",
+          "action": "按引用完成交付记录与验收",
+          "output": "delivery/{name}-审查报告.html",
+          "acceptance": "通过引用的交付门，未通过项按引用处理",
+          "references": [
+            "../techniques/quality-review/guide.md",
+            "records.md"
+          ],
+          "kind": "deliver",
+          "provider": "host",
+          "depends_on": [
+            "upscale",
+            "review"
+          ],
+          "inputs": [
+            "step:upscale",
+            "step:review"
+          ],
+          "requires": [],
+          "on_failure": "stop",
+          "resume": "reuse-output",
+          "execution_domain": "host",
+          "special_instructions": "以可播放模型成片为完成目标。交付成片MP4、HTML审查报告、实际请求参数；没做超分则成片就是生成分辨率的原视频且不重复附同一文件。做过超分才另附原片。报告列未做步骤、实际原因、启用所需条件；增强缺失不算核心制作失败。"
+        }
+      ],
+      "execution_plan": [
+        {
+          "step": "generate",
+          "operation": "H3 REF整段生成15秒576×1024竖屏视频",
+          "execution_domain": "self-hosted",
+          "required": true,
+          "on_missing": "stop"
+        },
+        {
+          "step": "review",
+          "operation": "检查画面、商品结构、动作、文字和声音",
+          "execution_domain": "host",
+          "required": true,
+          "on_missing": "stop"
+        },
+        {
+          "step": "edit",
+          "operation": "保留原音轨，叠加真实品牌Logo及一个确认卖点字幕",
+          "execution_domain": "self-hosted",
+          "required": false,
+          "on_missing": "skip-and-report",
+          "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。"
+        },
+        {
+          "step": "upscale",
+          "operation": "所选自建ComfyUI内RealESRGAN×4→1440×2560，保留原帧率与音轨",
+          "execution_domain": "self-hosted",
+          "billing": "self_hosted_compute",
+          "required": false,
+          "on_missing": "skip-and-report",
+          "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。"
+        },
+        {
+          "step": "deliver",
+          "operation": "交付可播放模型成片、HTML报告和实际请求参数；增强成功用增强版，否则用生成原片",
+          "execution_domain": "selected",
+          "required": true,
+          "on_missing": "stop"
+        }
+      ],
+      "technique_requirements": {
+        "materials": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "storyboarding": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "camera-and-effects": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "prompt-writing": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "reference-to-video": {
+          "default_provider": "workflow",
+          "bind_to_workflow": true,
+          "fixed_settings": {
+            "model": "minimax-h3-ref2va"
+          },
+          "execution_domain": "selected"
+        },
+        "sampling": {
+          "default_provider": "workflow",
+          "bind_to_workflow": true,
+          "fixed_settings": {
+            "steps": 20,
+            "ag": false,
+            "lora": false,
+            "turbo": false
+          },
+          "execution_domain": "selected"
+        },
+        "production-control": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "quality-review": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "audio": {
+          "default_provider": "host",
+          "execution_domain": "host"
+        },
+        "editing": {
+          "default_provider": "workflow",
+          "execution_domain": "selected",
+          "on_missing": "skip-and-report",
+          "notice": "未配置可用的Logo与文字叠加服务，本次不会后期添加品牌Logo和卖点字幕；保留已审原片和原音轨。",
+          "fixed_settings": {
+            "mode": "auto"
+          }
+        },
+        "upscaling": {
+          "default_provider": "workflow",
+          "fixed_settings": {
+            "model": "RealESRGAN_x4plus.pth",
+            "width": 1440,
+            "height": 2560,
+            "frames": 360,
+            "fps": 24
+          },
+          "execution_domain": "self-hosted",
+          "on_missing": "skip-and-report",
+          "bind_to_workflow": true,
+          "notice": "超分能力或预算不足时跳过，交付生成原片；报告说明实际缺少的模型/节点/资源或费用，以及启用需要补什么。"
+        }
+      },
+      "execution_graphs": {
+        "generate": "../techniques/reference-to-video/h3-ref-local/manifest.json",
+        "upscale": "../techniques/upscaling/realesrgan-2k-local/manifest.json"
+      },
+      "method": {
+        "model": "MiniMax H3 REF",
+        "sampling": "20步；无AG、LoRA或Turbo",
+        "creative_structure": "每条独立的创意与镜头结构；固定的是制作流程和技术规格，不是所有视频的分镜模板。",
+        "generation": "每条一次15秒整段REF；按确认成品数量运行，每条附审查报告，不自动质量返修。",
+        "steps": [
+          "configure",
+          "preflight",
+          "intake",
+          "creative",
+          "storyboard",
+          "prompt",
+          "generate",
+          "review",
+          "edit",
+          "upscale",
+          "deliver"
+        ],
+        "upscaling": "能力和资源允许时，在所选自建ComfyUI用RealESRGAN_x4plus后缩至1440×2560；不满足或失败则交付生成原片，说明缺项和启用条件。",
+        "editing": "已审原片保留原音轨；按固定版式叠加真实Logo及一个确认卖点。缺少叠加服务/资产提前告知，本流程允许交付不含额外叠加的已审原片。"
+      },
+      "integration_policy": {
+        "required_backend": "comfyui",
+        "selection_scope": "workflow",
+        "guide": "integration-selection.md"
+      }
+    }
+  },
+  "selection_policy": {
+    "confirm_each_task": true,
+    "skip_prompt_user_requested": false,
+    "show_supported_backends": true,
+    "confirm_before_intake": true
+  },
+  "pre_intake_checks": {
+    "comfyui": {
+      "required": true,
+      "command": "workflow-server-check",
+      "stage": "after-selection-before-materials"
+    }
+  },
+  "enhancement_policy": {
+    "upscale": "best-effort",
+    "storyboard_images": "best-effort",
+    "brand_overlays": "best-effort",
+    "audio_audition": "best-effort",
+    "extra_review_capabilities": "best-effort",
+    "on_unavailable": "skip-and-explain-reason-and-enablement",
+    "on_failure": "retain-generated-video-and-report",
+    "no_feature_menu": true
+  }
+}

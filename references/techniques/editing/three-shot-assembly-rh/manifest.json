@@ -1,0 +1,93 @@
+{
+  "id": "three-shot-assembly-rh",
+  "backend_evidence": "runninghub",
+  "source_record": "work/projects/steapx-orange-quality-routes-5000-20261018/rounds/shoe_restrained_final_v1/graph.json",
+  "source_execution": "completed historical execution; see content verdict separately",
+  "normalization": "uploaded inputs/prompt/seed/prefix parameterized; removed unused raw-output branches",
+  "required_parameters": [
+    "loadvideo-1",
+    "loadvideo-2",
+    "loadvideo-3",
+    "loadvideo-4",
+    "n8003-filename-prefix"
+  ],
+  "bindings": {
+    "loadvideo-1": "100.inputs.file",
+    "n102-length": "102.inputs.length",
+    "n102-batch-index": "102.inputs.batch_index",
+    "loadvideo-2": "110.inputs.file",
+    "n112-length": "112.inputs.length",
+    "n112-batch-index": "112.inputs.batch_index",
+    "loadvideo-3": "120.inputs.file",
+    "n122-length": "122.inputs.length",
+    "n122-batch-index": "122.inputs.batch_index",
+    "loadvideo-4": "300.inputs.file",
+    "n302-duration": "302.inputs.duration",
+    "n302-start-index": "302.inputs.start_index",
+    "n400-fps": "400.inputs.fps",
+    "n8003-filename-prefix": "8003.inputs.filename_prefix"
+  },
+  "node_classes": [
+    "AudioFade",
+    "CreateVideo",
+    "GetVideoComponents",
+    "ImageBatch",
+    "ImageFromBatch",
+    "LoadVideo",
+    "SaveVideo",
+    "TrimAudioDuration"
+  ],
+  "final_output_node": "8003",
+  "content_verdict": "editing executed; static result later rejected for dynamic brief",
+  "adaptation": false,
+  "input_roles": {
+    "loadvideo-1": {
+      "source_node": "100",
+      "direct_consumers": [
+        {
+          "node": "101",
+          "class_type": "GetVideoComponents",
+          "input": "video",
+          "output_index": 0
+        }
+      ]
+    },
+    "loadvideo-2": {
+      "source_node": "110",
+      "direct_consumers": [
+        {
+          "node": "111",
+          "class_type": "GetVideoComponents",
+          "input": "video",
+          "output_index": 0
+        }
+      ]
+    },
+    "loadvideo-3": {
+      "source_node": "120",
+      "direct_consumers": [
+        {
+          "node": "121",
+          "class_type": "GetVideoComponents",
+          "input": "video",
+          "output_index": 0
+        }
+      ]
+    },
+    "loadvideo-4": {
+      "source_node": "300",
+      "direct_consumers": [
+        {
+          "node": "301",
+          "class_type": "GetVideoComponents",
+          "input": "video",
+          "output_index": 0
+        }
+      ]
+    },
+    "n8003-filename-prefix": {
+      "source_node": "8003",
+      "direct_consumers": []
+    }
+  }
+}

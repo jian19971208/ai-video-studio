@@ -1,0 +1,22 @@
+{
+  "n6-unet-name": "minimax_h3_ref2va_pruned_int8_convrot.safetensors",
+  "n11-vae-name": "minimax_h3_video_vae_fp16.safetensors",
+  "n13-clip-name": "qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors",
+  "n24-vae-name": "minimax_h3_audio_vae_fp32.safetensors",
+  "n9-steps": 20,
+  "n5015-noise-seed": 2610193003,
+  "n5104-width": 576,
+  "n5104-height": 1024,
+  "n5104-length": 146,
+  "n7001-width": 576,
+  "n7001-height": 1024,
+  "n7002-frame-idx": 0,
+  "n7004-width": 576,
+  "n7004-height": 1024,
+  "n7005-frame-idx": 145,
+  "n8000-length": 144,
+  "n8000-batch-index": 0,
+  "n8001-duration": 6,
+  "n8001-start-index": 0,
+  "n8002-fps": 24
+}

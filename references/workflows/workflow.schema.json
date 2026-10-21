@@ -1,0 +1,511 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AVP production workflow v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "version",
+    "status",
+    "inputs",
+    "asset_strategy",
+    "requires",
+    "creative_strategy",
+    "steps",
+    "delivery",
+    "stop",
+    "guide",
+    "configuration",
+    "step_contract_version",
+    "portability"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "status": {
+      "enum": [
+        "candidate",
+        "experimental",
+        "production-validated"
+      ]
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "required"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "default": {},
+          "accepts": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "asset_strategy": {
+      "type": "object",
+      "required": [
+        "recipe"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string"
+        },
+        "recipe": {
+          "type": "string"
+        },
+        "fixed_source": {},
+        "on_missing": {
+          "type": "string"
+        }
+      }
+    },
+    "requires": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "action",
+          "output",
+          "acceptance",
+          "kind",
+          "provider",
+          "depends_on",
+          "inputs",
+          "requires",
+          "on_failure",
+          "resume"
+        ],
+        "properties": {
+          "references": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Local guide path relative to manifest, or skill: path relative to installed Skill."
+            },
+            "description": "Paths relative to the workflow manifest; Agent reads and follows these guides."
+          },
+          "special_instructions": {
+            "type": "string"
+          },
+          "when": {
+            "type": "object",
+            "description": "Agent-evaluated settings condition."
+          },
+          "availability": {
+            "type": "object",
+            "required": [
+              "requires"
+            ],
+            "properties": {
+              "policy_setting": {
+                "type": "string"
+              },
+              "requires": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              },
+              "on_missing": {
+                "enum": [
+                  "skip-when-auto",
+                  "skip-and-report"
+                ]
+              },
+              "notice": {
+                "type": "string",
+                "minLength": 1
+              },
+              "enablement": {
+                "type": "string",
+                "description": "What service, model, node or authorized budget enables this enhancement."
+              }
+            }
+          },
+          "kind": {
+            "enum": [
+              "plan",
+              "check",
+              "acquire",
+              "create",
+              "process",
+              "review",
+              "deliver"
+            ]
+          },
+          "provider": {
+            "type": "string",
+            "pattern": "^(host|selected-integration|capability:.+|config:.+)$"
+          },
+          "depends_on": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string"
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^(step|config|workflow-input|workflow|setting):.+"
+            }
+          },
+          "requires": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "on_failure": {
+            "enum": [
+              "stop",
+              "review-and-revise",
+              "skip-and-report"
+            ]
+          },
+          "resume": {
+            "enum": [
+              "reuse-output",
+              "same-task",
+              "review-state"
+            ]
+          },
+          "output": {
+            "type": "string",
+            "minLength": 1
+          },
+          "on_skip": {
+            "type": "string",
+            "pattern": "^step:.+"
+          },
+          "execution_domain": {
+            "enum": [
+              "host",
+              "selected",
+              "self-hosted",
+              "cloud"
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "anyOf": [
+                {
+                  "required": [
+                    "when"
+                  ]
+                },
+                {
+                  "required": [
+                    "availability"
+                  ]
+                }
+              ]
+            },
+            "then": {
+              "required": [
+                "on_skip"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "on_failure": {
+                  "const": "skip-and-report"
+                }
+              },
+              "required": [
+                "on_failure"
+              ]
+            },
+            "then": {
+              "required": [
+                "availability",
+                "on_skip"
+              ],
+              "properties": {
+                "availability": {
+                  "required": [
+                    "on_missing",
+                    "notice"
+                  ],
+                  "properties": {
+                    "on_missing": {
+                      "const": "skip-and-report"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "stop": {
+      "type": "object",
+      "required": [
+        "max_revisions_per_shot",
+        "budget_source"
+      ]
+    },
+    "delivery": {
+      "type": "object",
+      "required": [
+        "duration_seconds",
+        "fps",
+        "width",
+        "height"
+      ]
+    },
+    "configuration": {
+      "type": "object",
+      "required": [
+        "parameters",
+        "confirmation",
+        "validation_capability",
+        "conditional_requires"
+      ],
+      "properties": {
+        "parameters": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "type",
+              "default"
+            ],
+            "properties": {
+              "type": {
+                "enum": [
+                  "string",
+                  "boolean",
+                  "integer",
+                  "number"
+                ]
+              },
+              "default": {},
+              "minimum": {
+                "type": "number"
+              },
+              "maximum": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "confirmation": {
+          "type": "string"
+        },
+        "validation_capability": {
+          "type": "string"
+        },
+        "conditional_requires": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "when",
+              "requires"
+            ],
+            "properties": {
+              "when": {
+                "type": "object"
+              },
+              "requires": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "technique_bindings": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "technique",
+              "option"
+            ],
+            "properties": {
+              "technique": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]{0,79}$"
+              },
+              "option": {
+                "type": "string"
+              },
+              "when": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "fixed": {
+          "type": "object",
+          "description": "Immutable method values; never overridden by task/global/technique configuration."
+        },
+        "recipe_locked": {
+          "type": "boolean",
+          "description": "Workflow technique options must match its declared recipe or feature bindings."
+        },
+        "execution_locked": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "execution_locked": {
+                "const": true
+              }
+            },
+            "required": [
+              "execution_locked"
+            ]
+          },
+          "then": {
+            "properties": {
+              "parameters": {
+                "maxProperties": 0
+              },
+              "technique_bindings": {
+                "maxProperties": 0
+              },
+              "recipe_locked": {
+                "const": true
+              }
+            },
+            "required": [
+              "fixed",
+              "recipe_locked"
+            ]
+          }
+        }
+      ]
+    },
+    "step_contract_version": {
+      "const": 1
+    },
+    "portability": {
+      "type": "object",
+      "required": [
+        "scope"
+      ],
+      "properties": {
+        "scope": {
+          "enum": [
+            "portable",
+            "environment-specific"
+          ]
+        },
+        "configuration": {
+          "type": "string",
+          "pattern": "^config:.+"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "scope": {
+                "const": "environment-specific"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "configuration",
+              "reason"
+            ]
+          }
+        }
+      ]
+    },
+    "technique_requirements": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "default_provider": {
+            "enum": [
+              "host",
+              "workflow"
+            ]
+          },
+          "bind_to_workflow": {
+            "type": "boolean"
+          },
+          "when": {
+            "type": "object"
+          },
+          "availability_setting": {
+            "type": "string"
+          },
+          "fixed_settings": {
+            "type": "object"
+          },
+          "execution_domain": {
+            "enum": [
+              "host",
+              "selected",
+              "self-hosted",
+              "cloud"
+            ]
+          },
+          "on_missing": {
+            "enum": [
+              "stop",
+              "skip-and-report"
+            ]
+          },
+          "notice": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

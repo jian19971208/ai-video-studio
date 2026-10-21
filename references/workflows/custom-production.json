@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "workflow_kind": "custom-planner",
+  "id": "custom-production",
+  "name": "自定义制作",
+  "version": "2.6.2",
+  "status": "candidate",
+  "guide": "custom.md",
+  "supported_backends": [
+    "comfyui",
+    "runninghub-native"
+  ],
+  "inputs": [
+    {
+      "name": "brief",
+      "required": true,
+      "description": "用户描述目标；素材可由用户提供或由方案安排获取。"
+    },
+    {
+      "name": "materials",
+      "required": false
+    }
+  ],
+  "integration_policy": {
+    "selection_scope": "workflow",
+    "guide": "integration-selection.md"
+  },
+  "steps": [
+    {
+      "id": "brief",
+      "action": "理解目标、已有素材及交付要求",
+      "references": [
+        "custom.md"
+      ]
+    },
+    {
+      "id": "plan",
+      "action": "基于技巧层设计本次具体步骤、方法和规格",
+      "references": [
+        "authoring.md"
+      ]
+    },
+    {
+      "id": "select",
+      "action": "根据本次方案筛选接入，多候选未明确时询问用户",
+      "references": [
+        "integration-selection.md"
+      ]
+    },
+    {
+      "id": "validate",
+      "action": "编写实际任务执行清单与节点图，核对所选服务能力",
+      "references": [
+        "../preflight.md"
+      ]
+    },
+    {
+      "id": "execute",
+      "action": "按授权数量和费用执行；只恢复原任务",
+      "references": [
+        "../production.md"
+      ]
+    },
+    {
+      "id": "review",
+      "action": "审画面和技术，无法试听标待试听",
+      "references": [
+        "../techniques/quality-review/guide.md"
+      ]
+    },
+    {
+      "id": "deliver",
+      "action": "视频、HTML报告、实际请求参数同目录；超分时附原片",
+      "references": [
+        "records.md"
+      ]
+    }
+  ],
+  "execution": "Agent plans then compiles a task-specific execution manifest; this entry itself must never be treated as a ready generation graph",
+  "delivery": "Video tasks follow standard three-file delivery; a single review/upscale task delivers the artifacts it actually produces.",
+  "selection_policy": {
+    "confirm_each_task": true,
+    "skip_prompt_user_requested": false,
+    "show_supported_backends": true,
+    "confirm_before_intake": true
+  }
+}

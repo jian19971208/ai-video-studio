@@ -1,0 +1,42 @@
+{
+  "protocol": "avp-adapter-v1",
+  "extensible": true,
+  "builtin": [
+    {
+      "id": "comfyui",
+      "runtime": "avp",
+      "capabilities": [
+        "nodes.discover",
+        "models.discover",
+        "media.upload",
+        "graph.execute",
+        "task.status",
+        "output.download"
+      ],
+      "guide": "self-hosted-comfyui.md"
+    },
+    {
+      "id": "runninghub-native",
+      "runtime": "rh",
+      "capabilities": [
+        "account.inspect",
+        "nodes.discover",
+        "media.upload",
+        "graph.execute",
+        "task.status",
+        "output.download",
+        "cost.ledger"
+      ],
+      "guide": "runninghub.md"
+    }
+  ],
+  "host_provided": [
+    "image.generate.reference",
+    "image.inspect",
+    "video.reference.inspect",
+    "audio.audition",
+    "creative.web.discover",
+    "materials.cloud.read"
+  ],
+  "note": "host capabilities must be verified; no service is implied installed"
+}

@@ -1,0 +1,150 @@
+{
+  "id": "h3-video-ref-local",
+  "backend_evidence": "comfyui",
+  "source_record": "work/projects/steapx-orange-clay-pv15-local-20261019/server_rounds/ref_clay_pv15_v1/graph.json",
+  "source_execution": "completed historical execution; see content verdict separately",
+  "normalization": "uploaded inputs/prompt/seed/prefix parameterized; removed unused raw-output branches",
+  "required_parameters": [
+    "prompt",
+    "image-1",
+    "image-2",
+    "image-3",
+    "image-4",
+    "image-5",
+    "image-6",
+    "loadvideo-1",
+    "n8003-filename-prefix"
+  ],
+  "bindings": {
+    "n6-unet-name": "6.inputs.unet_name",
+    "n11-vae-name": "11.inputs.vae_name",
+    "n13-clip-name": "13.inputs.clip_name",
+    "n24-vae-name": "24.inputs.vae_name",
+    "n9-steps": "9.inputs.steps",
+    "n5015-noise-seed": "5015.inputs.noise_seed",
+    "prompt": "5104.inputs.prompt",
+    "n5104-width": "5104.inputs.width",
+    "n5104-height": "5104.inputs.height",
+    "n5104-length": "5104.inputs.length",
+    "image-1": "6000.inputs.image",
+    "image-2": "6001.inputs.image",
+    "image-3": "6002.inputs.image",
+    "image-4": "6003.inputs.image",
+    "image-5": "6004.inputs.image",
+    "image-6": "6005.inputs.image",
+    "loadvideo-1": "6200.inputs.file",
+    "n8000-length": "8000.inputs.length",
+    "n8000-batch-index": "8000.inputs.batch_index",
+    "n8001-duration": "8001.inputs.duration",
+    "n8001-start-index": "8001.inputs.start_index",
+    "n8002-fps": "8002.inputs.fps",
+    "n8003-filename-prefix": "8003.inputs.filename_prefix"
+  },
+  "node_classes": [
+    "BasicGuider",
+    "BasicScheduler",
+    "CLIPLoader",
+    "CreateVideo",
+    "GetVideoComponents",
+    "ImageFromBatch",
+    "KSamplerSelect",
+    "LoadImage",
+    "LoadVideo",
+    "MiniMaxH3ReferenceToVideo",
+    "MiniMaxH3SigmaShift",
+    "RandomNoise",
+    "SamplerCustomAdvanced",
+    "SaveVideo",
+    "TrimAudioDuration",
+    "UNETLoader",
+    "VAEDecodeAudio",
+    "VAEDecodeTiled",
+    "VAELoader"
+  ],
+  "final_output_node": "8003",
+  "content_verdict": "technical success; source product fidelity failed",
+  "adaptation": false,
+  "input_roles": {
+    "image-1": {
+      "source_node": "6000",
+      "direct_consumers": [
+        {
+          "node": "5104",
+          "class_type": "MiniMaxH3ReferenceToVideo",
+          "input": "ref_images.ref_image_0",
+          "output_index": 0
+        }
+      ]
+    },
+    "image-2": {
+      "source_node": "6001",
+      "direct_consumers": [
+        {
+          "node": "5104",
+          "class_type": "MiniMaxH3ReferenceToVideo",
+          "input": "ref_images.ref_image_1",
+          "output_index": 0
+        }
+      ]
+    },
+    "image-3": {
+      "source_node": "6002",
+      "direct_consumers": [
+        {
+          "node": "5104",
+          "class_type": "MiniMaxH3ReferenceToVideo",
+          "input": "ref_images.ref_image_2",
+          "output_index": 0
+        }
+      ]
+    },
+    "image-4": {
+      "source_node": "6003",
+      "direct_consumers": [
+        {
+          "node": "5104",
+          "class_type": "MiniMaxH3ReferenceToVideo",
+          "input": "ref_images.ref_image_3",
+          "output_index": 0
+        }
+      ]
+    },
+    "image-5": {
+      "source_node": "6004",
+      "direct_consumers": [
+        {
+          "node": "5104",
+          "class_type": "MiniMaxH3ReferenceToVideo",
+          "input": "ref_images.ref_image_4",
+          "output_index": 0
+        }
+      ]
+    },
+    "image-6": {
+      "source_node": "6005",
+      "direct_consumers": [
+        {
+          "node": "5104",
+          "class_type": "MiniMaxH3ReferenceToVideo",
+          "input": "ref_images.ref_image_5",
+          "output_index": 0
+        }
+      ]
+    },
+    "loadvideo-1": {
+      "source_node": "6200",
+      "direct_consumers": [
+        {
+          "node": "6201",
+          "class_type": "GetVideoComponents",
+          "input": "video",
+          "output_index": 0
+        }
+      ]
+    },
+    "n8003-filename-prefix": {
+      "source_node": "8003",
+      "direct_consumers": []
+    }
+  }
+}

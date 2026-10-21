@@ -1,0 +1,287 @@
+{
+  "6": {
+    "class_type": "UNETLoader",
+    "inputs": {
+      "weight_dtype": "default",
+      "unet_name": "${n6-unet-name}"
+    }
+  },
+  "11": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "${n11-vae-name}"
+    }
+  },
+  "13": {
+    "class_type": "CLIPLoader",
+    "inputs": {
+      "clip_name": "${n13-clip-name}",
+      "type": "minimax",
+      "device": "default"
+    }
+  },
+  "24": {
+    "class_type": "VAELoader",
+    "inputs": {
+      "vae_name": "${n24-vae-name}"
+    }
+  },
+  "9": {
+    "class_type": "BasicScheduler",
+    "inputs": {
+      "scheduler": "simple",
+      "denoise": 1,
+      "model": [
+        "20",
+        0
+      ],
+      "steps": "${n9-steps}"
+    }
+  },
+  "17": {
+    "class_type": "KSamplerSelect",
+    "inputs": {
+      "sampler_name": "res_multistep"
+    }
+  },
+  "20": {
+    "class_type": "MiniMaxH3SigmaShift",
+    "inputs": {
+      "model": [
+        "6",
+        0
+      ],
+      "shift_video": 12.0,
+      "shift_audio": 3.0
+    }
+  },
+  "5014": {
+    "class_type": "SamplerCustomAdvanced",
+    "inputs": {
+      "guider": [
+        "5016",
+        0
+      ],
+      "latent_image": [
+        "5104",
+        1
+      ],
+      "noise": [
+        "5015",
+        0
+      ],
+      "sigmas": [
+        "9",
+        0
+      ],
+      "sampler": [
+        "17",
+        0
+      ]
+    }
+  },
+  "5015": {
+    "class_type": "RandomNoise",
+    "inputs": {
+      "noise_seed": "${n5015-noise-seed}"
+    }
+  },
+  "5016": {
+    "class_type": "BasicGuider",
+    "inputs": {
+      "conditioning": [
+        "5104",
+        0
+      ],
+      "model": [
+        "20",
+        0
+      ]
+    }
+  },
+  "5010": {
+    "class_type": "VAEDecode",
+    "inputs": {
+      "vae": [
+        "11",
+        0
+      ],
+      "samples": [
+        "5014",
+        0
+      ]
+    }
+  },
+  "5023": {
+    "class_type": "VAEDecodeAudio",
+    "inputs": {
+      "vae": [
+        "24",
+        0
+      ],
+      "samples": [
+        "5014",
+        0
+      ]
+    }
+  },
+  "5091": {
+    "class_type": "CreateVideo",
+    "inputs": {
+      "codec": "auto",
+      "images": [
+        "5200",
+        0
+      ],
+      "fps": "${n5091-fps}",
+      "audio": [
+        "5201",
+        0
+      ],
+      "bit_depth": 8,
+      "color_space": "sRGB"
+    }
+  },
+  "5131": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "codec": "auto",
+      "filename_prefix": "${n5131-filename-prefix}",
+      "format": "auto",
+      "video": [
+        "5091",
+        0
+      ],
+      "format.codec": "auto"
+    }
+  },
+  "5104": {
+    "class_type": "MiniMaxH3ReferenceToVideo",
+    "inputs": {
+      "clip": [
+        "13",
+        0
+      ],
+      "vae": [
+        "11",
+        0
+      ],
+      "audio_vae": [
+        "24",
+        0
+      ],
+      "prompt": "${prompt}",
+      "width": "${n5104-width}",
+      "height": "${n5104-height}",
+      "length": "${n5104-length}",
+      "ref_image_size": "match",
+      "ref_images.ref_image_0": [
+        "6000",
+        0
+      ],
+      "ref_images.ref_image_1": [
+        "6001",
+        0
+      ],
+      "ref_images.ref_image_2": [
+        "6002",
+        0
+      ],
+      "ref_images.ref_image_3": [
+        "6003",
+        0
+      ],
+      "ref_images.ref_image_4": [
+        "6004",
+        0
+      ],
+      "ref_images.ref_image_5": [
+        "6005",
+        0
+      ],
+      "ref_videos.ref_video_0": [
+        "6201",
+        0
+      ],
+      "ref_video_audios.ref_video_audio_0": [
+        "6201",
+        1
+      ]
+    }
+  },
+  "6000": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "${image-1}"
+    }
+  },
+  "6001": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "${image-2}"
+    }
+  },
+  "6002": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "${image-3}"
+    }
+  },
+  "6003": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "${image-4}"
+    }
+  },
+  "6004": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "${image-5}"
+    }
+  },
+  "6005": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "${image-6}"
+    }
+  },
+  "6200": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "${loadvideo-1}",
+      "keep_audio": true,
+      "trim_time": "0"
+    }
+  },
+  "6201": {
+    "class_type": "GetVideoComponents",
+    "inputs": {
+      "video": [
+        "6200",
+        0
+      ]
+    }
+  },
+  "5200": {
+    "class_type": "ImageFromBatch",
+    "inputs": {
+      "image": [
+        "5010",
+        0
+      ],
+      "batch_index": "${n5200-batch-index}",
+      "length": "${n5200-length}"
+    }
+  },
+  "5201": {
+    "class_type": "TrimAudioDuration",
+    "inputs": {
+      "audio": [
+        "5023",
+        0
+      ],
+      "start_index": "${n5201-start-index}",
+      "duration": "${n5201-duration}"
+    }
+  }
+}
