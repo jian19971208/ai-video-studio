@@ -225,10 +225,11 @@
       "id": "review",
       "action": "按引用审查镜头并应用本流程验收重点",
       "output": "review/shots.json",
-      "acceptance": "按引用记录通过范围和问题，满足本流程验收重点",
+      "acceptance": "按引用记录通过范围和问题，满足本流程验收重点；用户报告按图文对比规范，实际商品问题附原商品与成片问题画面，不附抽帧时间线及规格大表",
       "references": [
         "../techniques/quality-review/guide.md",
-        "../techniques/audio/guide.md"
+        "../techniques/audio/guide.md",
+        "../techniques/quality-review/report-format.md"
       ],
       "special_instructions": "每条必须有HTML报告，按现有能力完成画面、商品与技术检查；无法看图/全片播放/试听的维度写待审、原因与补齐方式，不称通过，不以增强检查缺失阻塞模型视频生成。",
       "kind": "review",
@@ -322,10 +323,11 @@
       "id": "deliver",
       "action": "按引用完成交付记录与验收",
       "output": "delivery/{name}-审查报告.html",
-      "acceptance": "通过引用的交付门，未通过项按引用处理",
+      "acceptance": "通过引用的交付门，未通过项按引用处理；用户报告按图文对比规范，实际商品问题附原商品与成片问题画面，不附抽帧时间线及规格大表",
       "references": [
         "../techniques/quality-review/guide.md",
-        "records.md"
+        "records.md",
+        "../techniques/quality-review/report-format.md"
       ],
       "kind": "deliver",
       "provider": "host",
@@ -369,7 +371,27 @@
       "audio": "generated original track",
       "when": "upscale unavailable, unsupported, fails or lacks authorized budget"
     },
-    "resolution_policy": "Deliver generated model video; 2K is a best-effort enhancement, original resolution is a valid completed delivery. Record actual dimensions."
+    "resolution_policy": "Deliver generated model video; 2K is a best-effort enhancement, original resolution is a valid completed delivery. Record actual dimensions.",
+    "review_report": {
+      "guide": "../techniques/quality-review/report-format.md",
+      "layout": [
+        "conclusion",
+        "source-vs-issue-comparisons",
+        "pending-items-brief"
+      ],
+      "product_issue_comparison": "required-when-source-and-issue-visible",
+      "source": "real-user-product-images",
+      "issue_frame": "actual-final-delivered-video",
+      "image_embedding": "data-uri",
+      "omit": [
+        "specification-table",
+        "sampling-timeline",
+        "contact-sheets",
+        "extraction-method",
+        "batch-difference-justification",
+        "technical-process"
+      ]
+    }
   },
   "stop": {
     "max_revisions_per_shot": 0,
@@ -776,10 +798,11 @@
           "id": "review",
           "action": "按引用审查镜头并应用本流程验收重点",
           "output": "review/shots.json",
-          "acceptance": "按引用记录通过范围和问题，满足本流程验收重点",
+          "acceptance": "按引用记录通过范围和问题，满足本流程验收重点；用户报告按图文对比规范，实际商品问题附原商品与成片问题画面，不附抽帧时间线及规格大表",
           "references": [
             "../techniques/quality-review/guide.md",
-            "../techniques/audio/guide.md"
+            "../techniques/audio/guide.md",
+            "../techniques/quality-review/report-format.md"
           ],
           "special_instructions": "每条必须有HTML报告，按现有能力完成画面、商品与技术检查；无法看图/全片播放/试听的维度写待审、原因与补齐方式，不称通过，不以增强检查缺失阻塞模型视频生成。",
           "kind": "review",
@@ -874,10 +897,11 @@
           "id": "deliver",
           "action": "按引用完成交付记录与验收",
           "output": "delivery/{name}-审查报告.html",
-          "acceptance": "通过引用的交付门，未通过项按引用处理",
+          "acceptance": "通过引用的交付门，未通过项按引用处理；用户报告按图文对比规范，实际商品问题附原商品与成片问题画面，不附抽帧时间线及规格大表",
           "references": [
             "../techniques/quality-review/guide.md",
-            "records.md"
+            "records.md",
+            "../techniques/quality-review/report-format.md"
           ],
           "kind": "deliver",
           "provider": "host",
@@ -1227,10 +1251,11 @@
           "id": "review",
           "action": "按引用审查镜头并应用本流程验收重点",
           "output": "review/shots.json",
-          "acceptance": "按引用记录通过范围和问题，满足本流程验收重点",
+          "acceptance": "按引用记录通过范围和问题，满足本流程验收重点；用户报告按图文对比规范，实际商品问题附原商品与成片问题画面，不附抽帧时间线及规格大表",
           "references": [
             "../techniques/quality-review/guide.md",
-            "../techniques/audio/guide.md"
+            "../techniques/audio/guide.md",
+            "../techniques/quality-review/report-format.md"
           ],
           "special_instructions": "每条必须有HTML报告，按现有能力完成画面、商品与技术检查；无法看图/全片播放/试听的维度写待审、原因与补齐方式，不称通过，不以增强检查缺失阻塞模型视频生成。",
           "kind": "review",
@@ -1325,10 +1350,11 @@
           "id": "deliver",
           "action": "按引用完成交付记录与验收",
           "output": "delivery/{name}-审查报告.html",
-          "acceptance": "通过引用的交付门，未通过项按引用处理",
+          "acceptance": "通过引用的交付门，未通过项按引用处理；用户报告按图文对比规范，实际商品问题附原商品与成片问题画面，不附抽帧时间线及规格大表",
           "references": [
             "../techniques/quality-review/guide.md",
-            "records.md"
+            "records.md",
+            "../techniques/quality-review/report-format.md"
           ],
           "kind": "deliver",
           "provider": "host",

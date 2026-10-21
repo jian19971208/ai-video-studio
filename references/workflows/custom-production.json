@@ -65,14 +65,16 @@
       "id": "review",
       "action": "审画面和技术，无法试听标待试听",
       "references": [
-        "../techniques/quality-review/guide.md"
+        "../techniques/quality-review/guide.md",
+        "../techniques/quality-review/report-format.md"
       ]
     },
     {
       "id": "deliver",
       "action": "视频、HTML报告、实际请求参数同目录；超分时附原片",
       "references": [
-        "records.md"
+        "records.md",
+        "../techniques/quality-review/report-format.md"
       ]
     }
   ],

@@ -57,3 +57,6 @@ manifest中configuration.parameters={}、technique_bindings={}，execution_locke
 选择本次接入后、索取商品素材前，同时检查服务器生成能力和当前会话的参考生图能力。workflow-server-check只验证服务器节点/模型，不是全部前检通过；其host_checks_pending须由Agent按当前真实工具定义或已绑定图像服务完成核验。生图Skill已安装、视频服务器接通、历史会话曾能生图都不算证据。
 
 Agent检查当前实际工具/服务是否可调用、是否支持参考图，记录image.generate.reference的provider、tool、available_now、supports_reference_images及evidence。此时只核验，不生成收费测试图，也无需先索要素材。对用户简短说明“参考生图可用，将补充分镜图”，或“参考生图不可用，本次使用商品原图和文字分镜；启用需补充……”。未核验不得说整套工作流已检查通过。缺少可选生图仍可完成此检查并走原图REF回退；不能把未经检查写成不可用。
+
+
+审查报告的用户呈现统一遵循[图文对比报告规范](../techniques/quality-review/report-format.md)，不重复该规范。生成过程的检查记录留在内部，不作为报告正文。

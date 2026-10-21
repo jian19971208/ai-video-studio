@@ -36,7 +36,7 @@ workflow-targets输出ask_user、intake_allowed、supported_platforms。新proje
 
 ## 对用户交付
 
-同一交付文件夹只放：成片MP4、一份中文HTML审查报告、一份合并实际请求参数JSON；确实做了超分时另附原片。多条按名称/编号一一配对。HTML内嵌必要证据并直接说明结论、问题、审查范围、未审项和费用；请求参数包含本次实际生成及后期/超分请求，不含Key和凭据。抽帧、内部JSON、日志留在交付目录之外，不让用户逐个找。详见[记录规范](references/workflows/records.md)。
+同一交付文件夹只放：成片MP4、一份中文HTML审查报告、一份合并实际请求参数JSON；确实做了超分时另附原片。多条按名称/编号一一配对。HTML按[报告呈现规范](references/techniques/quality-review/report-format.md)，以“真实原商品 ↔ 成片问题画面”的并排对比为主，标问题位置和时间；只写结论与必要未审项，不附规格大表、抽帧过程或时间线联系表；请求参数包含本次实际生成及后期/超分请求，不含Key和凭据。抽帧、内部JSON、日志留在交付目录之外，不让用户逐个找。详见[记录规范](references/workflows/records.md)。
 
 ## 接入登记与长期配置
 
