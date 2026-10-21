@@ -13,7 +13,8 @@
 将下面这一句复制给你的 Agent：
 
 ```text
-请读取并执行安装说明：https://raw.githubusercontent.com/jian19971208/ai-video-studio/main/INSTALL.md
+请帮我安装并启用 AI Video Studio Skill。具体安装步骤和官方 H3 提示词 Skill 依赖，请读取并执行：
+https://raw.githubusercontent.com/jian19971208/ai-video-studio/main/INSTALL.md
 ```
 
 [INSTALL.md](INSTALL.md) 是给 Agent 执行的安装文档，已写清主 Skill 和官方 H3 依赖的来源、不同 Agent 的安装目录、具体下载命令、程序选择、安装验证和完成后的接入引导。你不需要自己下载压缩包、搬文件或编辑配置。
