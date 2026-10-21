@@ -175,10 +175,10 @@ func customPlanningState(cfg, w M) M {
 func customPlanCheck(w M) M {
 	require(text(w["id"]) != "" && text(w["guide"]) != "", "custom workflow needs identity and guide")
 	require(len(w["steps"].([]any)) > 0, "custom workflow needs planning steps")
-	return M{"workflow": w["id"], "schema": "passed", "planning_required": true, "ready": false, "scope": "planning workflow; compile and validate a task-specific execution plan before generation"}
+	return M{"workflow": w["id"], "schema": "passed", "planning_required": true, "ready": false, "scope": "planning workflow; compile and validate a task-specific execution plan before generation", "default_production": w["default_production"], "intake_policy": w["intake_policy"], "long_video_options": w["long_video_options"]}
 }
 
-func planningProject(config string, cfg, w M, mode, explicit, output, task, backend, profile, materials, inputsFile string) M {
+func planningProject(config string, cfg, w M, mode, explicit, output, task, backend, profile, materials, inputsFile string, taskOverrides ...M) M {
 	requireTaskSelection(cfg, w, profile)
 	path, source := projectDirectory(config, cfg, w, mode, explicit, output, task)
 	require(!exists(filepath.Join(path, "project.json")), "planning project exists; resume its recorded state")
@@ -201,6 +201,14 @@ func planningProject(config string, cfg, w M, mode, explicit, output, task, back
 		}
 	}
 	r := M{"workflow": w, "stage": "planning", "planning_required": true, "configuration_ready": false, "project_directory": path, "output_source": source, "selection": selection, "selection_required": len(selection) == 0, "inputs": inputs, "created_at": stamp(), "generation_authorized": false}
+	overrides := M{}
+	if len(taskOverrides) > 0 {
+		overrides = taskOverrides[0]
+	}
+	settings, sources := customSettings(cfg, w, overrides)
+	r["production_settings"] = settings
+	r["settings_sources"] = sources
+	r["settings_policy"] = "task overrides > saved custom defaults > workflow defaults; no separate parameter confirmation"
 	save(filepath.Join(path, "project.json"), r)
 	return r
 }

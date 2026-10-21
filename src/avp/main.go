@@ -23,7 +23,7 @@ import (
 
 type M = map[string]any
 
-var version = "2.6.3"
+var version = "2.6.4"
 
 func check(e error) {
 	if e != nil {
@@ -769,7 +769,11 @@ func run(a []string) any {
 			definition, base = workflowDefinition(*config, *workflow, cfg)
 		}
 		if customWorkflow(definition) {
-			return planningProject(*config, cfg, definition, *mode, *project, *outputDirectory, *taskName, *backend, *profile, *materials, *inputFile)
+			taskOverrides := M{}
+			if *settingsFile != "" {
+				taskOverrides = object(read(*settingsFile))
+			}
+			return planningProject(*config, cfg, definition, *mode, *project, *outputDirectory, *taskName, *backend, *profile, *materials, *inputFile, taskOverrides)
 		}
 		requireTaskSelection(cfg, definition, *profile)
 		chosenProfile := *profile

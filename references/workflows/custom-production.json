@@ -3,7 +3,7 @@
   "workflow_kind": "custom-planner",
   "id": "custom-production",
   "name": "自定义制作",
-  "version": "2.6.2",
+  "version": "2.6.4",
   "status": "candidate",
   "guide": "custom.md",
   "supported_backends": [
@@ -27,31 +27,53 @@
   },
   "steps": [
     {
+      "id": "select",
+      "action": "先确定自建ComfyUI或RH及具名配置；已有本次明确选择直接沿用",
+      "references": [
+        "integration-selection.md"
+      ]
+    },
+    {
+      "id": "discover",
+      "action": "核对该接入实际可用模型、规格、收费路线和当前宿主生图能力；只读，不生成测试",
+      "references": [
+        "../integrations/self-hosted-comfyui.md",
+        "../integrations/runninghub.md",
+        "../integrations/image-and-materials.md",
+        "../integrations/service-capabilities.md"
+      ]
+    },
+    {
+      "id": "options",
+      "action": "一次展示默认方案及真实可选项，有单独需求就修改；未指定沿用default_production，不强制逐项确认",
+      "references": [
+        "custom.md"
+      ]
+    },
+    {
       "id": "brief",
-      "action": "理解目标、已有素材及交付要求",
+      "action": "沿用已给目标和素材，只补必要内容、数量和输出位置",
       "references": [
         "custom.md"
       ]
     },
     {
       "id": "plan",
-      "action": "基于技巧层设计本次具体步骤、方法和规格",
+      "action": "先查技巧目录并读适用guide及图；按所选平台编排本次方案，不从零猜节点",
       "references": [
+        "../techniques/index.md",
+        "../techniques/execution.md",
+        "../techniques/graphs.md",
         "authoring.md"
       ]
     },
     {
-      "id": "select",
-      "action": "根据本次方案筛选接入，多候选未明确时询问用户",
-      "references": [
-        "integration-selection.md"
-      ]
-    },
-    {
       "id": "validate",
-      "action": "编写实际任务执行清单与节点图，核对所选服务能力",
+      "action": "形成实际任务清单和图，解析768P精确尺寸并核对节点、模型、参考槽和费用；不支持时告知",
       "references": [
-        "../preflight.md"
+        "../preflight.md",
+        "../integrations/cli.md",
+        "../integrations/runninghub.md"
       ]
     },
     {
@@ -85,5 +107,56 @@
     "skip_prompt_user_requested": false,
     "show_supported_backends": true,
     "confirm_before_intake": true
+  },
+  "default_production": {
+    "model": "MiniMax H3",
+    "resolution": "768P",
+    "aspect_ratio": "9:16",
+    "duration_seconds": 15,
+    "fps": 24,
+    "upscale": false,
+    "audio": "preserve-model-original",
+    "mode": "REF when suitable references exist; otherwise choose supported mode for the brief",
+    "dimension_policy": "Resolve exact width and height from live model/node alignment constraints; do not silently lower resolution or change orientation",
+    "apply_when_user_unspecified": true,
+    "require_separate_parameter_confirmation": false,
+    "long_video_strategy": "recommend-from-content"
+  },
+  "intake_policy": {
+    "order": [
+      "select-platform-and-profile",
+      "check-platform-models-billing-and-host-tools",
+      "show-defaults-and-supported-options",
+      "collect-only-missing-creative-inputs",
+      "plan-and-execute"
+    ],
+    "show_options_once": true,
+    "ask_only_missing_execution_critical_items": true,
+    "billing_route_must_be_disclosed": true,
+    "do_not_silently_switch_to_wallet": true,
+    "scope": "custom-production only; product-showcase remains a fixed recipe"
+  },
+  "long_video_options": {
+    "segmented_assembly": {
+      "guide": "../techniques/editing/guide.md",
+      "recommended_for": "multiple scenes"
+    },
+    "model_reference_continuation": {
+      "guide": "../techniques/video-continuation/guide.md",
+      "supported_model_family": "MiniMax H3",
+      "supported_method": "REF video reference input",
+      "execution": "serial continuation then assembly",
+      "unlimited_single_generation": false
+    },
+    "default_selection": "recommend from content unless user specifies"
+  },
+  "settings_resolution": {
+    "precedence": [
+      "task_override",
+      "saved_custom_defaults",
+      "default_production"
+    ],
+    "storage": "workflows/config.json: workflows.NAME.custom_defaults",
+    "separate_parameter_confirmation": false
   }
 }

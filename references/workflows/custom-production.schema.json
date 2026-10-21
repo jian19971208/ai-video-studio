@@ -34,6 +34,29 @@
           "references"
         ]
       }
+    },
+    "default_production": {
+      "type": "object",
+      "required": [
+        "model",
+        "resolution",
+        "duration_seconds",
+        "aspect_ratio",
+        "upscale",
+        "require_separate_parameter_confirmation"
+      ],
+      "properties": {
+        "duration_seconds": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "upscale": {
+          "type": "boolean"
+        },
+        "require_separate_parameter_confirmation": {
+          "const": false
+        }
+      }
     }
   }
 }

@@ -216,7 +216,12 @@ func registryCommand(cmd string, args []string, config, profile string) M {
 		}
 		w, _ := workflowDefinition(config, id, cfg)
 		if customWorkflow(w) {
-			return M{"name": id, "workflow": w["name"], "workflow_kind": w["workflow_kind"], "planning_required": true, "steps": w["steps"], "supported_backends": w["supported_backends"], "targets": workflowTargets(cfg, w), "state": customPlanningState(cfg, w), "production_options_editable": false, "configuration_only": true}
+			overrides := M{}
+			if *settingsFile != "" {
+				overrides = object(read(*settingsFile))
+			}
+			values, sources := customSettings(cfg, w, overrides)
+			return M{"default_production": w["default_production"], "current_production": values, "settings_sources": sources, "intake_policy": w["intake_policy"], "long_video_options": w["long_video_options"], "name": id, "workflow": w["name"], "workflow_kind": w["workflow_kind"], "planning_required": true, "steps": w["steps"], "supported_backends": w["supported_backends"], "targets": workflowTargets(cfg, w), "state": customPlanningState(cfg, w), "production_options_editable": true, "configuration_only": true}
 		}
 		settings, resolution := configuredSettings(cfg, w, nil, "configured")
 		features := M{}
@@ -294,7 +299,15 @@ func registryCommand(cmd string, args []string, config, profile string) M {
 		entry["output_directory"] = checkedOutputDirectory(config, *outputDirectory)
 	}
 	if customWorkflow(w) {
-		require(*settingsFile == "" && *mappingsFile == "", "custom workflow plans are task-specific, not saved recipe options")
+		require(*mappingsFile == "", "custom technique mappings belong to the task plan")
+		if *settingsFile != "" {
+			changes := object(read(*settingsFile))
+			customSettings(cfg, w, changes)
+			chosen := childMap(entry, "custom_defaults")
+			for key, value := range changes {
+				chosen[key] = value
+			}
+		}
 		saveStudioConfig(config, cfg)
 		r := customPlanningState(cfg, w)
 		r["saved"] = true
