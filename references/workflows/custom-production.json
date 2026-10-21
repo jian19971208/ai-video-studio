@@ -156,7 +156,17 @@
     "ask_one_combined_direction_question_when_unspecified": true,
     "do_not_repeat_current_context_choices": true,
     "explicit_simple_or_direct_request_uses_defaults": true,
-    "never_enable_optional_steps_only_because_they_are_available": true
+    "never_enable_optional_steps_only_because_they_are_available": true,
+    "default_configuration_notice": {
+      "enabled": true,
+      "frequency": "once-per-conversation-on-first-custom-production-entry",
+      "text": "默认配置可以修改：只改本次直接说；想以后都沿用，请说“以后默认……”。",
+      "repeat_for_new_task_in_same_conversation": false,
+      "repeat_on_followups_or_revisions": false,
+      "reset_on_new_conversation": true,
+      "tracking": "use current conversation history or host session state; do not persist a global already-shown flag",
+      "independent_of_integration_selection_prompt": true
+    }
   },
   "long_video_options": {
     "segmented_assembly": {
