@@ -21,7 +21,7 @@ If the host cannot execute local tools or install Skills, state that specific li
 | `ai-video-studio` | `https://github.com/jian19971208/ai-video-studio.git` | repository root `.` | `main` |
 | `h3-prompt-writing` | `https://github.com/MiniMax-AI/MiniMax-H3.git` | `skills/h3-prompt-writing` | `main` |
 
-The first repository root contains `SKILL.md`, `agents`, `references`, `bin`, and `src`. Install the whole Skill, not just `SKILL.md`. Install only the indicated H3 prompt Skill, not H3 models, other official Skills, a ComfyUI server, or a global npm package.
+The first repository root contains `SKILL.md`, `agents`, `references`, `bin`, and `src`. Install the whole Skill, not just `SKILL.md`. Install only the indicated H3 prompt Skill, not H3 models, other official Skills, a ComfyUI server, or a new system runtime.
 
 Check both destinations first. A complete existing official `h3-prompt-writing` may be reused. An existing main Skill may be updated only within the user's installation/update request; preserve local edits and report a conflict rather than overwriting them. Never overwrite integration configuration or projects. Do not create duplicate installations of the same named Skill in multiple discovery directories.
 
@@ -36,7 +36,7 @@ Pass the repository, branch, source directory and destination name from the tabl
 
 Replace `SKILLS_DIR` with the directory selected in step 1. Run the helper with an existing Python interpreter only if the host already provides one; Python is not a required runtime for this Skill.
 
-### Fallback: Git, without Node.js or Python
+### Fallback: Git
 
 If no host installer exists but Git is available, use the following commands for absent destinations. For Codex the examples use its user-level directory; substitute the host directory selected above when installing elsewhere.
 

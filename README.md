@@ -20,15 +20,6 @@
 
 需要使用支持本地文件、网络和程序调用的 Agent。纯聊天环境无法完成本机安装。
 
-若你习惯自己使用 skills CLI，且已有其要求的 Node.js 环境，可以执行：
-
-```sh
-npx skills add https://github.com/jian19971208/ai-video-studio --skill ai-video-studio -g
-npx skills add https://github.com/MiniMax-AI/MiniMax-H3 --skill h3-prompt-writing -g
-```
-
-这是另一种安装方式，不是运行依赖。Agent 不需要为此额外安装 Node.js，安装文档另有宿主安装器和 Git 路线。
-
 ## H3 官方依赖
 
 本项目不重新打包 MiniMax 提示词 Skill，独立安装并保留其官方来源：
