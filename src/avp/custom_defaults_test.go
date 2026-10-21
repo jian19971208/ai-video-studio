@@ -34,3 +34,22 @@ func TestCustomReviewDefaultsOffAndCanBeEnabled(t *testing.T) {
 	}
 	panics(t, func() { customSettings(cfg, w, M{"review": "true"}) })
 }
+
+func TestCustomStoryboardChoiceOverridesSavedPreference(t *testing.T) {
+	w := M{"id": "custom-production", "default_production": M{"storyboard_images": false}}
+	cfg := defaults()
+	values, _ := customSettings(cfg, w, nil)
+	if values["storyboard_images"] != false {
+		t.Fatal("storyboard images must default off")
+	}
+	entry := childMap(childMap(childMap(cfg, "production"), "workflows"), "custom-production")
+	entry["custom_defaults"] = M{"storyboard_images": true}
+	values, sources := customSettings(cfg, w, M{"storyboard_images": false})
+	if values["storyboard_images"] != false || sources["storyboard_images"] != "task-override" {
+		t.Fatal("old default overrode current request", values, sources)
+	}
+	if object(entry["custom_defaults"])["storyboard_images"] != true {
+		t.Fatal("task choice changed saved preference")
+	}
+	panics(t, func() { customSettings(cfg, w, M{"storyboard_images": "false"}) })
+}

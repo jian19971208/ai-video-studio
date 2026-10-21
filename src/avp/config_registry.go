@@ -221,7 +221,7 @@ func registryCommand(cmd string, args []string, config, profile string) M {
 				overrides = object(read(*settingsFile))
 			}
 			values, sources := customSettings(cfg, w, overrides)
-			return M{"default_production": w["default_production"], "current_production": values, "settings_sources": sources, "intake_policy": w["intake_policy"], "long_video_options": w["long_video_options"], "name": id, "workflow": w["name"], "workflow_kind": w["workflow_kind"], "planning_required": true, "steps": w["steps"], "supported_backends": w["supported_backends"], "targets": workflowTargets(cfg, w), "state": customPlanningState(cfg, w), "production_options_editable": true, "configuration_only": true}
+			return M{"technique_options": w["technique_options"], "storyboard_policy": w["storyboard_policy"], "default_production": w["default_production"], "current_production": values, "settings_sources": sources, "intake_policy": w["intake_policy"], "long_video_options": w["long_video_options"], "name": id, "workflow": w["name"], "workflow_kind": w["workflow_kind"], "planning_required": true, "steps": w["steps"], "supported_backends": w["supported_backends"], "targets": workflowTargets(cfg, w), "state": customPlanningState(cfg, w), "production_options_editable": true, "configuration_only": true}
 		}
 		settings, resolution := configuredSettings(cfg, w, nil, "configured")
 		features := M{}

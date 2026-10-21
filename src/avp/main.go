@@ -23,7 +23,7 @@ import (
 
 type M = map[string]any
 
-var version = "2.6.5"
+var version = "2.6.6"
 
 func check(e error) {
 	if e != nil {

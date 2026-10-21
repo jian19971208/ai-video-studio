@@ -3,7 +3,7 @@
   "workflow_kind": "custom-planner",
   "id": "custom-production",
   "name": "自定义制作",
-  "version": "2.6.5",
+  "version": "2.6.6",
   "status": "candidate",
   "guide": "custom.md",
   "supported_backends": [
@@ -45,7 +45,7 @@
     },
     {
       "id": "options",
-      "action": "一次展示默认方案及真实可选项，有单独需求就修改；未指定沿用default_production，不强制逐项确认",
+      "action": "按上下文展示简单方案和相关技巧选项，一次询问制作方向；已有明确选择或直接做指令不重复问，不强加逐项确认",
       "references": [
         "custom.md"
       ]
@@ -59,7 +59,7 @@
     },
     {
       "id": "plan",
-      "action": "先查技巧目录并读适用guide及图；按所选平台编排本次方案，不从零猜节点",
+      "action": "读取适用技巧，按本次选择设计文字分镜、节点和提示词；storyboard_images=false时不调用生图或插入图片审定",
       "references": [
         "../techniques/index.md",
         "../techniques/execution.md",
@@ -68,8 +68,19 @@
       ]
     },
     {
+      "id": "storyboard-images",
+      "action": "仅storyboard_images=true时提前生成并查看图片分镜；关闭则沿用真实参考图与文字方案",
+      "when": {
+        "storyboard_images": true
+      },
+      "references": [
+        "../techniques/storyboarding/guide.md",
+        "../integrations/image-and-materials.md"
+      ]
+    },
+    {
       "id": "validate",
-      "action": "形成实际任务清单和图，解析768P精确尺寸并核对节点、模型、参考槽和费用；不支持时告知",
+      "action": "按实际选用步骤核验能力；关闭的图片分镜、超分与审查不列为必需依赖",
       "references": [
         "../preflight.md",
         "../integrations/cli.md",
@@ -124,7 +135,8 @@
     "apply_when_user_unspecified": true,
     "require_separate_parameter_confirmation": false,
     "long_video_strategy": "recommend-from-content",
-    "review": false
+    "review": false,
+    "storyboard_images": false
   },
   "intake_policy": {
     "order": [
@@ -138,7 +150,13 @@
     "ask_only_missing_execution_critical_items": true,
     "billing_route_must_be_disclosed": true,
     "do_not_silently_switch_to_wallet": true,
-    "scope": "custom-production only; product-showcase remains a fixed recipe"
+    "scope": "custom-production only; product-showcase remains a fixed recipe",
+    "offer_simple_or_optional_techniques": true,
+    "present_relevant_technique_options": true,
+    "ask_one_combined_direction_question_when_unspecified": true,
+    "do_not_repeat_current_context_choices": true,
+    "explicit_simple_or_direct_request_uses_defaults": true,
+    "never_enable_optional_steps_only_because_they_are_available": true
   },
   "long_video_options": {
     "segmented_assembly": {
@@ -170,5 +188,58 @@
     "when_enabled": "follow quality-review guide and comparison report format",
     "explicit_review_request": "set review=true for this task",
     "do_not_modify_existing_tasks": true
+  },
+  "technique_options": [
+    {
+      "id": "storyboard-images",
+      "name": "提前生成图片分镜",
+      "setting": "storyboard_images",
+      "default": false,
+      "purpose": "先设计人物、场景和构图，再作为视频参考；多一步生图和查看设计图",
+      "guide": "../techniques/storyboarding/guide.md"
+    },
+    {
+      "id": "video-motion-reference",
+      "name": "视频动作/运镜参考",
+      "default": "only if requested or chosen for relevant brief",
+      "purpose": "用已有视频示意动作与镜头，需实际视频参考能力；不自动生成白模",
+      "guide": "../techniques/video-reference/guide.md"
+    },
+    {
+      "id": "camera-and-effects",
+      "name": "运镜与背景效果",
+      "default": "fit current brief",
+      "purpose": "可选镜头风格、环境和背景特效，由用户内容决定，不额外强加制作步骤",
+      "guide": "../techniques/camera-and-effects/guide.md"
+    },
+    {
+      "id": "long-video",
+      "name": "长视频拼接或H3参考续接",
+      "default": "only when requested duration needs it",
+      "guide": "../techniques/video-continuation/guide.md"
+    },
+    {
+      "id": "upscale",
+      "name": "超分提升清晰度",
+      "setting": "upscale",
+      "default": false,
+      "guide": "../techniques/upscaling/guide.md"
+    },
+    {
+      "id": "review",
+      "name": "图文质量审查",
+      "setting": "review",
+      "default": false,
+      "guide": "../techniques/quality-review/guide.md"
+    }
+  ],
+  "storyboard_policy": {
+    "enabled_setting": "storyboard_images",
+    "default": false,
+    "must_mention_as_option": true,
+    "when_disabled": "Use supplied references and text shot planning; no new storyboard image generation, image approval stage or associated mandatory capability",
+    "when_enabled": "Read storyboarding guide, check actual image tool, design and inspect images before video generation",
+    "existing_user_images_remain_valid_references": true,
+    "scope": "custom-production only"
   }
 }

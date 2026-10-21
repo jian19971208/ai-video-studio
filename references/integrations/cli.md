@@ -120,10 +120,10 @@ RH工作流API接入时用`rh --account NAME --credential member execution-entry
 
 ## 自定义制作默认配置
 
-`avp workflow-describe --template custom-production`输出default_production、current_production、settings_sources、intake_policy和long_video_options。默认H3/768P/15秒/9:16/24fps，超分和内容审查关闭；未指定沿用，不要求参数逐项确认。
+`avp workflow-describe --template custom-production`输出default_production、current_production、settings_sources、intake_policy和long_video_options。默认H3/768P/15秒/9:16/24fps，图片分镜提前生成、超分和内容审查关闭；未指定沿用，不要求参数逐项确认。
 
 - 本次覆盖：`avp --profile PROFILE project --workflow custom-production --project TASK --settings TASK_OVERRIDES.json`，省略--settings则用默认。
 - 用户明确要求以后默认：`avp workflow-configure --name NAME --template custom-production --settings CHANGES.json`，只保存给出的覆盖项到统一workflows/config.json；不更改商品宣传。
 - 只预览本次覆盖：`avp workflow-describe --template custom-production --settings TASK_OVERRIDES.json`，不保存。
 
-Agent根据对话写JSON，不要求用户操作文件。字段支持model、mode、resolution、aspect_ratio、duration_seconds、fps、upscale、review、upscale_model、delivery_resolution、audio、long_video_strategy、billing_route。默认不是能力证明：先选接入，读实际模型和费用，不能把平台不支持的选项当作已可执行。
+Agent根据对话写JSON，不要求用户操作文件。字段支持model、mode、resolution、aspect_ratio、duration_seconds、fps、upscale、review、storyboard_images、upscale_model、delivery_resolution、audio、long_video_strategy、billing_route。默认不是能力证明：先选接入，读实际模型和费用，不能把平台不支持的选项当作已可执行。

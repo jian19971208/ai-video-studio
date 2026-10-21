@@ -175,7 +175,7 @@ func customPlanningState(cfg, w M) M {
 func customPlanCheck(w M) M {
 	require(text(w["id"]) != "" && text(w["guide"]) != "", "custom workflow needs identity and guide")
 	require(len(w["steps"].([]any)) > 0, "custom workflow needs planning steps")
-	return M{"workflow": w["id"], "schema": "passed", "planning_required": true, "ready": false, "scope": "planning workflow; compile and validate a task-specific execution plan before generation", "default_production": w["default_production"], "intake_policy": w["intake_policy"], "long_video_options": w["long_video_options"]}
+	return M{"workflow": w["id"], "schema": "passed", "planning_required": true, "ready": false, "scope": "planning workflow; compile and validate a task-specific execution plan before generation", "default_production": w["default_production"], "intake_policy": w["intake_policy"], "long_video_options": w["long_video_options"], "technique_options": w["technique_options"], "storyboard_policy": w["storyboard_policy"]}
 }
 
 func planningProject(config string, cfg, w M, mode, explicit, output, task, backend, profile, materials, inputsFile string, taskOverrides ...M) M {
