@@ -1,46 +1,46 @@
-# AI Video Studio — Agent installation instructions
+# AI Video Studio — Agent 安装说明
 
-This document is for the Agent performing installation. Execute the steps below. Do not ask the user to forward another prompt, re-read an installation README, edit JSON, or manually copy files.
+本文给执行安装的 Agent 阅读。直接按以下步骤完成安装，不要让用户再转发提示词、返回 README 查安装方式、编辑 JSON 或手动搬文件。
 
-## 1. Identify the host and installation directory
+## 1. 确认当前 Agent、系统和安装目录
 
-Detect the current Agent, operating system, CPU architecture, and existing user-level Skill location. Reuse the current host's registered Skill installation tool when available. Otherwise use the user-level directory below, resolved from the current user's home directory, never an author's absolute path:
+检查当前 Agent、操作系统、CPU 架构和已有的用户级 Skill 目录。有宿主自带安装工具就优先使用，否则采用下表中的目录。路径从当前用户主目录解析，不使用作者电脑的固定路径：
 
-| Host | User-level Skill directory |
+| Agent | 用户级 Skill 目录 |
 | --- | --- |
-| Codex | `~/.agents/skills` (or an existing host-managed directory reported by its installer) |
+| Codex | `~/.agents/skills`，或其安装工具实际使用的已有目录 |
 | Claude Code | `~/.claude/skills` |
-| Other Skill-capable Agent | Its documented or already registered user-level Skill directory; inspect the host before choosing |
+| 其他支持 Skill 的 Agent | 使用该 Agent 文档规定或已登记的用户级目录，先核对再选择 |
 
-If the host cannot execute local tools or install Skills, state that specific limitation. Do not pretend a GitHub webpage was installed as a runnable Skill. Do not change unrelated Agent instructions or system-wide settings.
+如果当前环境不能执行本机工具或安装 Skill，直接说明具体缺少的能力。仅打开 GitHub 网页不算安装完成。不要修改无关的 Agent 规则或系统设置。
 
-## 2. Install these two Skills
+## 2. 安装主 Skill 和官方提示词依赖
 
-| Destination directory name | Git repository | Source directory | Branch |
+| 安装后的目录名 | Git 仓库 | 仓库内来源目录 | 分支 |
 | --- | --- | --- | --- |
-| `ai-video-studio` | `https://github.com/jian19971208/ai-video-studio.git` | repository root `.` | `main` |
+| `ai-video-studio` | `https://github.com/jian19971208/ai-video-studio.git` | 仓库根目录 `.` | `main` |
 | `h3-prompt-writing` | `https://github.com/MiniMax-AI/MiniMax-H3.git` | `skills/h3-prompt-writing` | `main` |
 
-The first repository root contains `SKILL.md`, `agents`, `references`, `bin`, and `src`. Install the whole Skill, not just `SKILL.md`. Install only the indicated H3 prompt Skill, not H3 models, other official Skills, a ComfyUI server, or a new system runtime.
+主仓库根目录包含 `SKILL.md`、`agents`、`references`、`bin` 和 `src`，需要完整安装，不能只下载 SKILL.md。H3 仓库只取表中的提示词 Skill，不安装 H3 模型、其他官方 Skill、ComfyUI 服务器或新的系统运行环境。
 
-Check both destinations first. A complete existing official `h3-prompt-writing` may be reused. An existing main Skill may be updated only within the user's installation/update request; preserve local edits and report a conflict rather than overwriting them. Never overwrite integration configuration or projects. Do not create duplicate installations of the same named Skill in multiple discovery directories.
+先检查两个目标目录。已有完整且来源确认的官方 `h3-prompt-writing` 可以复用。已有主 Skill 时，按用户本次安装或更新要求处理；保留本地修改，存在冲突就说明，不直接覆盖。不要覆盖接入配置和制作项目，也不要在多个目录重复安装同名 Skill。
 
-### Preferred: existing host installer
+### 优先使用宿主已有的安装工具
 
-Pass the repository, branch, source directory and destination name from the table to the host's installer. For a Codex `install-skill-from-github.py` helper that is already available, use its actual discovered path with these arguments:
+将上表的仓库、分支、来源目录和安装名称传给宿主安装工具。如果当前 Codex 已有 `install-skill-from-github.py`，先定位该工具，再分别使用下面两组参数调用：
 
 ```text
 --repo jian19971208/ai-video-studio --ref main --path . --name ai-video-studio --dest SKILLS_DIR
 --repo MiniMax-AI/MiniMax-H3 --ref main --path skills/h3-prompt-writing --name h3-prompt-writing --dest SKILLS_DIR
 ```
 
-Replace `SKILLS_DIR` with the directory selected in step 1. Run the helper with an existing Python interpreter only if the host already provides one; Python is not a required runtime for this Skill.
+将 `SKILLS_DIR` 替换为第一步确定的目录。只有宿主已经提供 Python 时才使用这个工具；不要为安装额外部署 Python，Skill 本身运行不依赖它。
 
-### Fallback: Git
+### 没有宿主安装工具时，使用已有的 Git
 
-If no host installer exists but Git is available, use the following commands for absent destinations. For Codex the examples use its user-level directory; substitute the host directory selected above when installing elsewhere.
+如果没有宿主安装工具但已有 Git，可对尚不存在的目标目录使用下面的命令。示例使用 Codex 的用户级目录；其他 Agent 改为第一步实际确定的目录。
 
-macOS/Linux:
+macOS/Linux：
 
 ```sh
 studio_skills_dir="$HOME/.agents/skills"
@@ -54,7 +54,7 @@ git -C "$studio_h3_temp/source" sparse-checkout set skills/h3-prompt-writing
 cp -R "$studio_h3_temp/source/skills/h3-prompt-writing" "$studio_skills_dir/h3-prompt-writing"
 ```
 
-Windows PowerShell:
+Windows PowerShell：
 
 ```powershell
 $studioSkillsDir = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.agents/skills'
@@ -71,13 +71,13 @@ if ($LASTEXITCODE -ne 0) { throw 'Official H3 directory selection failed' }
 Copy-Item -LiteralPath (Join-Path $studioH3Temp 'skills/h3-prompt-writing') -Destination (Join-Path $studioSkillsDir 'h3-prompt-writing') -Recurse
 ```
 
-Stop on any failed download or copy; do not report success from a partially installed directory. If neither installer nor Git exists, use the host's existing download/archive tools to obtain the same source directories. Do not install a new system runtime merely to install this Skill.
+任何下载或复制失败后立即停止，不把半成品目录当作安装成功。若安装器和 Git 都没有，使用宿主已有的下载、解压工具取得同样的来源目录，不为此安装新的系统运行环境。
 
-## 3. Select and verify the local executable
+## 3. 选择对应系统程序并验证安装
 
-Choose the matching directory under the installed main Skill:
+在安装好的主 Skill 中选择当前系统和架构对应的程序：
 
-| System and architecture | Directory | Programs |
+| 系统与架构 | 目录 | 程序 |
 | --- | --- | --- |
 | Windows x64 | `bin/windows-amd64` | `avp.exe`, `rh.exe` |
 | macOS Apple Silicon | `bin/darwin-arm64` | `avp`, `rh` |
@@ -85,9 +85,9 @@ Choose the matching directory under the installed main Skill:
 | Linux x64 | `bin/linux-amd64` | `avp`, `rh` |
 | Linux ARM64 | `bin/linux-arm64` | `avp`, `rh` |
 
-Other combinations are not bundled; report the missing architecture rather than launching a mismatched binary. On macOS/Linux, if executable permission was lost during download, apply `chmod +x` only to the two selected files. Do not disable OS security protections.
+未列出的系统与架构没有附带程序，说明缺项，不运行不匹配的文件。macOS/Linux 下载后若丢失执行权限，仅对所选的两个程序执行 `chmod +x`，不关闭系统安全机制。
 
-Run the selected programs using their absolute installed paths:
+使用所选程序的实际安装绝对路径，分别执行以下命令：
 
 ```text
 avp version
@@ -95,9 +95,9 @@ rh version
 avp config-root
 ```
 
-These are read-only checks. `avp config-root` reports the OS-resolved `AIVideoStudio` directory and its three configuration layers. Do not initialize sample accounts, copy another user's configuration, or store credentials in the Skill directory.
+以上均为只读检查。`avp config-root` 返回按当前系统解析的 `AIVideoStudio` 配置根目录及三层入口。不初始化示例账号、不复制他人配置、不把凭据存进 Skill 目录。
 
-Verify that all these files are readable:
+确认以下文件齐全且可以读取：
 
 ```text
 ai-video-studio/SKILL.md
@@ -108,14 +108,14 @@ h3-prompt-writing/references/base-en.txt
 h3-prompt-writing/references/ref-en.txt
 ```
 
-The H3 Skill is official only when retrieved from the MiniMax source above, or an existing installation with confirmed provenance. Its prompt guides are not video-generation models. Record the installed source/version when available; do not call the generation API to test installation.
+H3 Skill 使用上表的 MiniMax 官方来源，或复用已确认来源的安装。它提供提示词规范，不是视频模型。能取得版本时记录来源和版本；不调用生成 API 测试安装。
 
-## 4. Activate and hand off
+## 4. 启用并进入接入引导
 
-Report the two installed directories, selected platform and executable check results briefly. If the host needs a reload/new turn to discover new Skills, explain that actual host requirement; do not claim the Skill was registered before discovery.
+简短报告两个安装目录、所选系统及程序验证结果。如果当前宿主确实需要重新加载或新开一轮对话才能发现 Skill，就说明该要求，未发现前不宣称已经注册成功。
 
-Read the installed `ai-video-studio/SKILL.md` and follow it to begin onboarding. Installation ends here; service registration and video production follow the Skill's own rules. With no registered integration, begin with “先完成接入配置。” and let the user choose self-hosted ComfyUI or RunningHub International. Do not submit a generation task during installation.
+读取安装后的 `ai-video-studio/SKILL.md`，按它的规则开始使用。安装步骤到此结束，服务登记与视频制作由 Skill 自身规则管理。没有已登记接入时，先说“先完成接入配置。”，让用户选择自建 ComfyUI 或 RunningHub 国际站。安装过程中不提交生成任务。
 
-## Updating
+## 更新方式
 
-Treat updates as a separate user request. For a clean Git-based installation, `git pull --ff-only` updates the main Skill. For host-managed copies, use the same installer/update mechanism and preserve local changes. Update the official H3 Skill separately from its MiniMax source when requested. Existing `AIVideoStudio` configuration and output projects stay in place.
+用户要求更新时再执行。Git 安装且没有本地修改的主 Skill 可使用 `git pull --ff-only`；宿主管理的安装使用对应更新机制并保留本地修改。官方 H3 依赖按需要从 MiniMax 来源单独更新。现有 `AIVideoStudio` 配置和制作项目保留原位。
