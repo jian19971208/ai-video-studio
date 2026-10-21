@@ -35,7 +35,7 @@
     },
     {
       "id": "discover",
-      "action": "核对该接入实际可用模型、规格、收费路线和当前宿主生图能力；只读，不生成测试",
+      "action": "初始只读核对连通、库存、收费与宿主工具，作为介绍选项依据；不声称最终需求可执行",
       "references": [
         "../integrations/self-hosted-comfyui.md",
         "../integrations/runninghub.md",
@@ -45,7 +45,7 @@
     },
     {
       "id": "options",
-      "action": "按上下文展示简单方案和相关技巧选项，一次询问制作方向；已有明确选择或直接做指令不重复问，不强加逐项确认",
+      "action": "先说明方案仅供参考，用表格列默认配置和制作方式，按实际需求选择；已明确项不重复问",
       "references": [
         "custom.md"
       ]
@@ -80,7 +80,7 @@
     },
     {
       "id": "validate",
-      "action": "按实际选用步骤核验能力；关闭的图片分镜、超分与审查不列为必需依赖",
+      "action": "最终需求确定后、提交前，按实际图和输入复核所选平台模型/节点/规格/资源/费用；与初始库存检查分开",
       "references": [
         "../preflight.md",
         "../integrations/cli.md",
@@ -176,6 +176,31 @@
       "question": "你想使用现成模板，还是按你的想法自定义制作？目前模板有商品宣传。",
       "context_explicit_choice": "reuse current context without asking again",
       "do_not_assume_custom_from_generic_video_request": true
+    },
+    "presentation": {
+      "format": "tables",
+      "sections": [
+        "reference-only notice and adapt-to-actual-brief",
+        "effective-default-settings",
+        "available-production-methods-and-conditions",
+        "ask-only-unspecified-goal-or-choices"
+      ],
+      "reference_notice": "以下默认和方式是参考起点；会结合实际内容、素材和要求选择，提交前按最终方案核验所选接入是否可运行。",
+      "must_list_methods": [
+        "direct-generation",
+        "storyboard-image-design",
+        "video-motion-reference",
+        "long-video-assembly-or-h3-reference-continuation",
+        "optional-upscale-and-review"
+      ],
+      "do_not_repeat_resolved_questions": true
+    },
+    "readiness_checks": {
+      "initial": "read-only connectivity, inventory, billing route and host tools for option presentation",
+      "final": "after final requirements, before submission; validate actual graph/model/input/specification/resources/authorized-cost",
+      "initial_is_not_final_readiness": true,
+      "invalidate_related_evidence_on_requirement_change": true,
+      "paid_probe": false
     }
   },
   "long_video_options": {
