@@ -45,7 +45,7 @@
     },
     {
       "id": "options",
-      "action": "至多一张概览介绍默认起点和可讨论方向；声明非制作清单、不保证全部采用，围绕内容持续沟通，由Agent据需求安排",
+      "action": "一张表说明默认做什么和交付什么，表后简短介绍可能采用的技巧；通过对话理解用户，不要求先勾选技术菜单",
       "references": [
         "custom.md"
       ]
@@ -59,7 +59,7 @@
     },
     {
       "id": "plan",
-      "action": "读取适用技巧，按本次选择设计文字分镜、节点和提示词；storyboard_images=false时不调用生图或插入图片审定",
+      "action": "提取本次要求和有效配置，读取适用技巧，记录要求→方法→实际节点/参考/参数/提示词的对应；关闭步骤不执行",
       "references": [
         "../techniques/index.md",
         "../techniques/execution.md",
@@ -80,7 +80,7 @@
     },
     {
       "id": "validate",
-      "action": "最终需求确定后、提交前，按实际图和输入复核所选平台模型/节点/规格/资源/费用；与初始库存检查分开",
+      "action": "提交前对照实际请求与本次要求及有效配置，修正遗漏和旧参数，再核验最终图、输入、资源和费用；结构通过不等于意图已落实",
       "references": [
         "../preflight.md",
         "../integrations/cli.md",
@@ -178,15 +178,15 @@
       "do_not_assume_custom_from_generic_video_request": true
     },
     "presentation": {
-      "format": "single-brief-contextual-overview",
+      "format": "one-default-action-table-then-short-technique-suggestions",
       "max_tables": 1,
-      "separate_defaults_and_methods_tables": false,
-      "opening_notice": "你只管描述想拍什么，我们边聊边确定，我会按实际需求安排。下面是默认起点与可讨论方向，不是本次制作清单，表中内容不一定会采用，也可提出表外需求。",
+      "table_purpose": "what will be done and delivered by default when user has no special request",
+      "table_is_not_technique_menu": true,
+      "technique_suggestions": "brief relevant prose after the table; possible methods, not promised video content or mandatory steps",
       "conversational_refinement": true,
-      "agent_selects_methods_from_requirements_and_feedback": true,
-      "user_must_select_every_technique": false,
-      "listed_options_are_not_promised_content_or_mandatory_steps": true,
-      "adapt_or_shorten_to_current_context": true,
+      "user_can_name_techniques_or_describe_effects": true,
+      "agent_must_design_actual_execution_from_context": true,
+      "do_not_require_user_to_choose_every_method": true,
       "do_not_repeat_resolved_questions": true
     },
     "readiness_checks": {
@@ -290,5 +290,23 @@
     "when_enabled": "Read storyboarding guide, check actual image tool, design and inspect images before video generation",
     "existing_user_images_remain_valid_references": true,
     "scope": "custom-production only"
+  },
+  "execution_alignment": {
+    "record_in_existing_task_plan": true,
+    "required_content": [
+      "current-user-requirements-and-sources",
+      "effective-settings-and-overrides",
+      "selected-methods-with-reasons",
+      "actual-node-graph-inputs-parameters-and-prompt"
+    ],
+    "before_submission": "compare actual request with current requirements and settings; correct mismatches then validate selected backend",
+    "disabled_optional_steps_must_not_execute": [
+      "storyboard_images",
+      "upscale",
+      "review"
+    ],
+    "on_user_change": "update plan and actual graph/prompt/inputs as applicable; recheck affected capabilities",
+    "no_extra_delivery_files": true,
+    "semantic_checks_owner": "executing Agent; graph schema validation alone does not judge story or intent"
   }
 }
